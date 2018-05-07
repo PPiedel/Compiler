@@ -8,5 +8,15 @@
     <artifactId>Compiler</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.antlr/antlr4-runtime -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+            <version>4.7.1</version>
+        </dependency>
+    </dependencies>
+
+
+
 </project>
