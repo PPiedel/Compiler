@@ -75,13 +75,13 @@ public class PBaseListener implements PListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterType(PParser.TypeContext ctx) { }
+	@Override public void enterVariable_definition(PParser.Variable_definitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitType(PParser.TypeContext ctx) { }
+	@Override public void exitVariable_definition(PParser.Variable_definitionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

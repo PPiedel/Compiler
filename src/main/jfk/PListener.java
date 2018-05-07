@@ -57,13 +57,13 @@ public interface PListener extends ParseTreeListener {
 	 */
 	void exitAssignment(PParser.AssignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PParser#type}.
+	 * Enter a parse tree produced by {@link PParser#variable_definition}.
 	 * @param ctx the parse tree
 	 */
-	void enterType(PParser.TypeContext ctx);
+	void enterVariable_definition(PParser.Variable_definitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PParser#type}.
+	 * Exit a parse tree produced by {@link PParser#variable_definition}.
 	 * @param ctx the parse tree
 	 */
-	void exitType(PParser.TypeContext ctx);
+	void exitVariable_definition(PParser.Variable_definitionContext ctx);
 }
