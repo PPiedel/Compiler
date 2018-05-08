@@ -19,35 +19,50 @@ public class Compiler {
     }
 
     static public class StatementExpression extends Statement {
-        private final Expression m_expr;
+        private final Expression expr;
 
         public StatementExpression(Expression expr) {
-            m_expr = expr;
+            this.expr = expr;
         }
 
         @Override
         public String toString() {
             return "StatementExpression{" +
-                    "m_expr=" + m_expr +
+                    "expr=" + expr +
                     '}';
         }
     }
 
-    static public class VariableDefinition extends Statement {
-        private final String m_name;
+    static public class IntVariableDefinition extends Statement {
+        private final String name;
 
-        public VariableDefinition(String name) {
-            m_name = name;
+        public IntVariableDefinition(String name) {
+            this.name = name;
         }
 
         public String getName() {
-            return m_name;
+            return name;
         }
 
         @Override
         public String toString() {
-            return "VariableDefinition{" +
-                    "m_name='" + m_name + '\'' +
+            return "IntVariableDefinition{" +
+                    "name='" + name + '\'' +
+                    '}';
+        }
+    }
+
+    static public class FloatVariableDefinition extends Statement {
+        private final String name;
+
+        public FloatVariableDefinition(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return "FloatVariableDefinition{" +
+                    "name='" + name + '\'' +
                     '}';
         }
     }
@@ -109,7 +124,7 @@ public class Compiler {
     public static void main(String[] args) {
         try {
 
-            PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader("test.txt")));
+            PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader("code.P")));
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             PParser parser = new PParser(tokens);
             Program def = parser.program().val;

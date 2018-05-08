@@ -28,7 +28,8 @@ assignment returns [Compiler.Assignment val] :
 ;
 
 variable_definition returns [Compiler.VariableDefinition val] :
-    INT name = ID { $val = new Compiler.VariableDefinition($name.text); }
+    INT name = ID { $val = new Compiler.IntVariableDefinition($name.text); } |
+    FLOAT name = ID { $val = new Compiler.FloatVariableDefinition($name.text); }
 ;
 
 
@@ -40,5 +41,6 @@ COMMENT
 
 NUMBER : '0'..'9'+ ;
 INT : 'int';
+FLOAT : 'float';
 ID  : 'a'..'z'+ ;
 WS : (' '|'\r'|'\n') -> skip;

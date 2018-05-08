@@ -1,2 +1,2 @@
 #!/bin/bash
-llc -filetype=obj helloWorld.ll; gcc helloWorld.o -o helloWorld; ./helloWorld
+llc -filetype=obj code.ll; gcc code.o -o code; ./code
