@@ -1,12 +1,9 @@
-// Generated from /home/ppiedel/IdeaProjects/Compiler/src/main/jfk/P.g4 by ANTLR 4.7
+package main;// Generated from /home/ppiedel/IdeaProjects/Compiler/src/main/jfk/P.g4 by ANTLR 4.7
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class PParser extends Parser {
@@ -109,7 +106,7 @@ public class PParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			 ((ProgramContext)_localctx).val =  new Compiler.Program(); 
+			 ((ProgramContext)_localctx).val =  new Compiler.Program();
 			setState(16);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -223,7 +220,7 @@ public class PParser extends Parser {
 				}
 				setState(39);
 				((BodyContext)_localctx).a = statement();
-				 ((BodyContext)_localctx).val =  new Compiler.Body(); _localctx.val.add(((BodyContext)_localctx).a.val); 
+				 ((BodyContext)_localctx).val =  new Compiler.Body(); _localctx.val.add(((BodyContext)_localctx).a.val);
 				setState(51);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
@@ -324,7 +321,7 @@ public class PParser extends Parser {
 				{
 				setState(63);
 				((StatementContext)_localctx).a = expression();
-				((StatementContext)_localctx).val =  new Compiler.StatementExpression(((StatementContext)_localctx).a.val); 
+				((StatementContext)_localctx).val =  new Compiler.StatementExpression(((StatementContext)_localctx).a.val);
 				}
 				break;
 			case INT:
@@ -384,7 +381,7 @@ public class PParser extends Parser {
 				{
 				setState(71);
 				((ExpressionContext)_localctx).a = match(NUMBER);
-				 ((ExpressionContext)_localctx).val =  new Compiler.IntExpression((((ExpressionContext)_localctx).a!=null?((ExpressionContext)_localctx).a.getText():null)); 
+				 ((ExpressionContext)_localctx).val =  new Compiler.IntExpression((((ExpressionContext)_localctx).a!=null?((ExpressionContext)_localctx).a.getText():null));
 				}
 				break;
 			case ID:
@@ -444,7 +441,7 @@ public class PParser extends Parser {
 			match(T__3);
 			setState(80);
 			((AssignmentContext)_localctx).what = expression();
-			 ((AssignmentContext)_localctx).val =  new Compiler.Assignment((((AssignmentContext)_localctx).to!=null?((AssignmentContext)_localctx).to.getText():null), ((AssignmentContext)_localctx).what.val); 
+			 ((AssignmentContext)_localctx).val =  new Compiler.Assignment((((AssignmentContext)_localctx).to!=null?((AssignmentContext)_localctx).to.getText():null), ((AssignmentContext)_localctx).what.val);
 			}
 		}
 		catch (RecognitionException re) {
@@ -487,7 +484,7 @@ public class PParser extends Parser {
 			match(INT);
 			setState(84);
 			((Variable_definitionContext)_localctx).name = match(ID);
-			 ((Variable_definitionContext)_localctx).val =  new Compiler.VariableDefinition((((Variable_definitionContext)_localctx).name!=null?((Variable_definitionContext)_localctx).name.getText():null)); 
+			 ((Variable_definitionContext)_localctx).val =  new Compiler.VariableDefinition((((Variable_definitionContext)_localctx).name!=null?((Variable_definitionContext)_localctx).name.getText():null));
 			}
 		}
 		catch (RecognitionException re) {

@@ -1,4 +1,4 @@
-// Generated from /home/ppiedel/IdeaProjects/Compiler/src/main/jfk/P.g4 by ANTLR 4.7
+package main;// Generated from /home/ppiedel/IdeaProjects/Compiler/src/main/jfk/P.g4 by ANTLR 4.7
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
