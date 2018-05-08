@@ -1,4 +1,5 @@
-package main;// Generated from /home/ppiedel/IdeaProjects/Compiler/src/main/jfk/P.g4 by ANTLR 4.7
+// Generated from /home/ppiedel/IdeaProjects/Compiler/front/src/main/P.g4 by ANTLR 4.7
+package main;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

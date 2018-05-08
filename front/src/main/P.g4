@@ -13,7 +13,7 @@ body returns [Compiler.Body val] :
 
 statement returns [Compiler.Statement val] :
     a = expression {$val = new Compiler.StatementExpression($a.val); } |
-    b = variable_definition { $val = $b.val; }
+    c = variable_definition { $val = $c.val; }
 ;
 
 
@@ -28,8 +28,8 @@ assignment returns [Compiler.Assignment val] :
 ;
 
 variable_definition returns [Compiler.VariableDefinition val] :
-    INT name = ID { $val = new Compiler.IntVariableDefinition($name.text); } |
-    FLOAT name = ID { $val = new Compiler.FloatVariableDefinition($name.text); }
+    'int' name = ID { $val = new Compiler.IntVariableDefinition($name.text); } |
+    'float' name = ID { $val = new Compiler.FloatVariableDefinition($name.text); }
 ;
 
 

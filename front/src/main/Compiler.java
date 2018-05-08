@@ -33,39 +33,45 @@ public class Compiler {
         }
     }
 
-    static public class IntVariableDefinition extends Statement {
-        private final String name;
+    public static abstract class VariableDefinition extends Statement{
 
-        public IntVariableDefinition(String name) {
-            this.name = name;
+    }
+
+
+    static public class IntVariableDefinition extends VariableDefinition{
+        private final String varName;
+
+        public IntVariableDefinition(String varName) {
+            this.varName = varName;
         }
 
-        public String getName() {
-            return name;
+        public String getVarName() {
+            return varName;
         }
 
         @Override
         public String toString() {
             return "IntVariableDefinition{" +
-                    "name='" + name + '\'' +
+                    "varName='" + varName + '\'' +
                     '}';
         }
     }
 
-    static public class FloatVariableDefinition extends Statement {
-        private final String name;
+    static public class FloatVariableDefinition extends VariableDefinition{
+        private final String varName;
 
-        public FloatVariableDefinition(String name) {
-            this.name = name;
+        public FloatVariableDefinition(String varName) {
+            this.varName = varName;
         }
 
         @Override
         public String toString() {
             return "FloatVariableDefinition{" +
-                    "name='" + name + '\'' +
+                    "varName='" + varName + '\'' +
                     '}';
         }
     }
+
 
     static public abstract class Expression {}
 
