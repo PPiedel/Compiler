@@ -107,6 +107,18 @@ public class PBaseListener implements PListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPrint(PParser.PrintContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReturnst(PParser.ReturnstContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturnst(PParser.ReturnstContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

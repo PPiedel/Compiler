@@ -27,6 +27,11 @@ public final class IRGenerator {
 
         for (Front.Function function : functions) {
             appendFunctionHead(ir, function);
+            if (function.getBody()!=null){
+                for (Front.Statement statement: function.getBody().getStatements()) {
+                    ir.append(statement.getIRCode());
+                }
+            }
 
             appendFunctionEnd(ir);
 

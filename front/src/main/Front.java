@@ -10,12 +10,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static main.ir_generator.IRTemplate.GLOBAL_FLOAT;
-import static main.ir_generator.IRTemplate.GLOBAL_INT;
-import static main.ir_generator.IRTemplate.PRINT_ID;
+import static main.ir_generator.IRTemplate.*;
 
 public class Front {
     private static final String LL_FILE_NAME = "code.ll";
@@ -40,9 +37,9 @@ public class Front {
 
     static public class Function {
         private final String name;
-        private List<String> m_arguments = new ArrayList<String>();
-        private Body m_body;
-        private String returnType;
+        List<String> m_arguments = new ArrayList<String>();
+        Body body;
+        String returnType;
 
         public Function(String name, String returnType) {
             this.name = name;
@@ -54,11 +51,11 @@ public class Front {
         }
 
         public void setBody(Body b) {
-            m_body = b;
+            body = b;
         }
 
-        public Body getM_body() {
-            return m_body;
+        public Body getBody() {
+            return body;
         }
 
         public String getName() {
@@ -78,7 +75,7 @@ public class Front {
             return "Function{" +
                     "name='" + name + '\'' +
                     ", m_arguments=" + m_arguments +
-                    ", m_body=" + m_body +
+                    ", body=" + body +
                     ", returnType='" + returnType + '\'' +
                     '}';
         }
@@ -111,6 +108,50 @@ public class Front {
 
     static abstract class PrintStatement  extends Statement{
 
+    }
+
+    static abstract class ReturnStatement  extends Statement{
+
+    }
+
+    static class ReturnInt extends ReturnStatement {
+        private final String value;
+
+        public ReturnInt(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String getIRCode() {
+            return String.format(RETURN_INT,Integer.parseInt(value));
+        }
+
+        @Override
+        public String toString() {
+            return "ReturnInt{" +
+                    "value='" + value + '\'' +
+                    '}';
+        }
+    }
+
+    static class ReturnFloat extends ReturnStatement {
+        private final String value;
+
+        public ReturnFloat(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String getIRCode() {
+            return String.format(RETURN_FLOAT, Float.parseFloat(value));
+        }
+
+        @Override
+        public String toString() {
+            return "ReturnFloat{" +
+                    "value='" + value + '\'' +
+                    '}';
+        }
     }
 
     static class PrintIDStatement extends PrintStatement {
@@ -159,7 +200,7 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return String.format(GLOBAL_INT,name,Integer.parseInt(value));
+            return String.format(LOCAL_VARIABLE_INT_DECLARATION,name).concat(String.format(LOCAL_VARIABLE_INT_ASSIGMENT,Integer.parseInt(value),name));
         }
     }
 
@@ -182,7 +223,7 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return String.format(GLOBAL_FLOAT, name,Float.parseFloat(value));
+            return String.format(LOCAL_VARIABLE_FLOAT_DECLARATION,name).concat(String.format(LOCAL_VARIABLE_FLOAT_ASSIGMENT,Float.parseFloat(value),name));
         }
     }
 
@@ -247,6 +288,14 @@ public class Front {
 
         void add(Statement stmt) {
             statements.add(stmt);
+        }
+
+        public List<Statement> getStatements() {
+            return statements;
+        }
+
+        public void setStatements(List<Statement> statements) {
+            this.statements = statements;
         }
 
         @Override

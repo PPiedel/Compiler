@@ -1,16 +1,16 @@
-
-int GLOBAL = 5;
-float GLOBAL2 = 6;
-
 fun main() : int {
+    int zmienna = 5;
+    float drugazmienna = 10.0;
+    return 0;
 }
 
 fun superIntFunkcja() : int {
-    int zmienna = 5;
-    float drugazmienna = 10;
+
+    return 0;
 };
 
 fun superFloatFunkcja() : float {
     int zmienna = 5;
-    float drugazmienna = 10;
+    float drugazmienna = 10.5;
+    return 5.0;
 };
