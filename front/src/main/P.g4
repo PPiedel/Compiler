@@ -29,7 +29,8 @@ statement returns [Front.Statement val] :
     a = expression {$val = new Front.StatementExpression($a.val); } |
     c = variable_declaration { $val = $c.val; } |
     d = print{{ $val = $d.val; } } |
-    e = returnst{{ $val = $e.val; } }
+    e = returnst{{ $val = $e.val; } } |
+    f = read{{ $val = $f.val; } }
 ;
 
 
@@ -57,6 +58,10 @@ returnst returns [Front.ReturnStatement val] :
     RETURN NUMBER_FLOAT {$val = new Front.ReturnFloat($NUMBER_FLOAT.text);}
 ;
 
+read returns [Front.Read val] :
+    READ_INT LEFT_BRACKET reference = ID RIGHT_BRACKET {$val = new Front.ReadInt($reference.text);} |
+    READ_FLOAT LEFT_BRACKET reference = ID RIGHT_BRACKET {$val = new Front.ReadFloat($reference.text);} |
+;
 
 COMMENT
     :   ( '//' ~[\r\n]* '\r'? '\n' | '/*' .*? '*/') -> skip
@@ -78,6 +83,12 @@ FLOAT : 'float'
 ;
 
 PRINT : 'print'
+;
+
+READ_INT : 'readInt'
+;
+
+READ_FLOAT : 'readFloat'
 ;
 
 FUN : 'fun'

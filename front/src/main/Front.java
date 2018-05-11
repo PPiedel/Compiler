@@ -21,7 +21,6 @@ public class Front {
     private static int COUNTER = 1;
 
 
-
     public static class Program {
         List<Statement> statements = new ArrayList<Statement>();
         List<Function> functions = new ArrayList<Function>();
@@ -106,11 +105,61 @@ public class Front {
         }
     }
 
-    static abstract class PrintStatement  extends Statement{
+    static abstract class Read extends Statement {
 
     }
 
-    static abstract class ReturnStatement  extends Statement{
+    static class ReadInt extends Read {
+        private final String reference;
+
+        public ReadInt(String reference) {
+            this.reference = reference;
+        }
+
+        @Override
+        public String getIRCode() {
+            int counterState = COUNTER;
+            String ir = String.format(READ_INT, counterState, reference);
+            COUNTER += 1;
+            return ir;
+        }
+
+        @Override
+        public String toString() {
+            return "ReadInt{" +
+                    "reference='" + reference + '\'' +
+                    '}';
+        }
+    }
+
+    static class ReadFloat extends Read {
+        private final String reference;
+
+        public ReadFloat(String reference) {
+            this.reference = reference;
+        }
+
+        @Override
+        public String getIRCode() {
+            int counterState = COUNTER;
+            String ir = String.format(READ_FLOAT, counterState, reference);
+            COUNTER += 1;
+            return ir;
+        }
+
+        @Override
+        public String toString() {
+            return "ReadFloat{" +
+                    "reference='" + reference + '\'' +
+                    '}';
+        }
+    }
+
+    static abstract class PrintStatement extends Statement {
+
+    }
+
+    static abstract class ReturnStatement extends Statement {
 
     }
 
@@ -123,7 +172,7 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return String.format(RETURN_INT,Integer.parseInt(value));
+            return String.format(RETURN_INT, Integer.parseInt(value));
         }
 
         @Override
@@ -164,8 +213,8 @@ public class Front {
         @Override
         public String getIRCode() {
             int counterState = COUNTER;
-            String ir = String.format(PRINT_ID,counterState,id,COUNTER+1,counterState);
-            COUNTER+=2;
+            String ir = String.format(PRINT_ID, counterState, id, COUNTER + 1, counterState);
+            COUNTER += 2;
             return ir;
         }
 
@@ -203,7 +252,7 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return String.format(LOCAL_VARIABLE_INT_DECLARATION,name).concat(String.format(LOCAL_VARIABLE_INT_ASSIGMENT,Integer.parseInt(value),name));
+            return String.format(LOCAL_VARIABLE_INT_DECLARATION, name).concat(String.format(LOCAL_VARIABLE_INT_ASSIGMENT, Integer.parseInt(value), name));
         }
     }
 
@@ -226,7 +275,7 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return String.format(LOCAL_VARIABLE_FLOAT_DECLARATION,name).concat(String.format(LOCAL_VARIABLE_FLOAT_ASSIGMENT,Float.parseFloat(value),name));
+            return String.format(LOCAL_VARIABLE_FLOAT_DECLARATION, name).concat(String.format(LOCAL_VARIABLE_FLOAT_ASSIGMENT, Float.parseFloat(value), name));
         }
     }
 
@@ -329,7 +378,7 @@ public class Front {
 
         List<Function> functions = program.val.functions;
         System.out.println("Program functions : ");
-        for (Function fun : functions){
+        for (Function fun : functions) {
             System.out.println(fun.toString());
         }
 
@@ -341,6 +390,6 @@ public class Front {
         IRGenerator irGenerator = new IRGenerator(program);
         String intermediateRepresentation = irGenerator.generateIR();
 
-        Util.writeIRToFile(intermediateRepresentation,new File(LL_FILE_NAME));
+        Util.writeIRToFile(intermediateRepresentation, new File(LL_FILE_NAME));
     }
 }

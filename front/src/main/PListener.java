@@ -97,4 +97,14 @@ public interface PListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturnst(PParser.ReturnstContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PParser#read}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead(PParser.ReadContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PParser#read}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead(PParser.ReadContext ctx);
 }

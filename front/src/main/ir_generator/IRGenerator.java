@@ -53,12 +53,14 @@ public final class IRGenerator {
 
     private void endFile(StringBuilder ir) {
         ir.append(PRINTF_DECLARATION);
+        ir.append(READ_DECLARATION);
         ir.append(END);
     }
 
     private void beginFile(StringBuilder ir) {
         ir.append(BEGIN).append(NEW_LINE);
-        ir.append(STR_CONSTATNT);
+        ir.append(PRINT_STR_CONSTATNT);
+        ir.append(READ_STRING_CONST);
     }
 
     private void appendFunctionEnd(StringBuilder ir) {

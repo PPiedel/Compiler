@@ -1,8 +1,6 @@
 fun main() : int {
-    int zmienna = 5;
-    int zmienna2 = 8;
-
-    print(zmienna);
-    print(zmienna2);
+    int testInteger = 0;
+    readInt(testInteger);
+    print(testInteger);
     return 0;
 }
