@@ -1,35 +1,35 @@
 grammar P;
 
-program returns [IRGenerator.Program val] :
-    { $val = new IRGenerator.Program(); } (';')* ((statement ';'+) { $val.statements.add($statement.val); })*;
+program returns [Front.Program val] :
+    { $val = new Front.Program(); } (';')* ((statement ';'+) { $val.statements.add($statement.val); })*;
 
-body returns [IRGenerator.Body val] :
+body returns [Front.Body val] :
     '{'
-    ((';')* a = statement { $val = new IRGenerator.Body(); $val.add($a.val); }
+    ((';')* a = statement { $val = new Front.Body(); $val.add($a.val); }
         ((';')+ b = statement { $val.add($b.val); })*
     (';')+)?
     '}'
 ;
 
-statement returns [IRGenerator.Statement val] :
-    a = expression {$val = new IRGenerator.StatementExpression($a.val); } |
+statement returns [Front.Statement val] :
+    a = expression {$val = new Front.StatementExpression($a.val); } |
     c = variable_declaration { $val = $c.val; }
 ;
 
 
-expression returns [IRGenerator.Expression val] :
-    a = NUMBER { $val = new IRGenerator.IntExpression($a.text); } |
+expression returns [Front.Expression val] :
+    a = NUMBER { $val = new Front.IntExpression($a.text); } |
     d = assignment { $val = $d.val; }
 ;
 
 
-assignment returns [IRGenerator.Assignment val] :
-    to = ID '=' what = expression { $val = new IRGenerator.Assignment($to.text, $what.val); }
+assignment returns [Front.Assignment val] :
+    to = ID '=' what = expression { $val = new Front.Assignment($to.text, $what.val); }
 ;
 
-variable_declaration returns [IRGenerator.VariableDeclaration val] :
-    'int' name = ID { $val = new IRGenerator.IntVariableDeclaration($name.text); } |
-    'float' name = ID { $val = new IRGenerator.FloatVariableDeclaration($name.text); }
+variable_declaration returns [Front.VariableDeclaration val] :
+    'int' name = ID { $val = new Front.IntVariableDeclaration($name.text); } |
+    'float' name = ID { $val = new Front.FloatVariableDeclaration($name.text); }
 ;
 
 

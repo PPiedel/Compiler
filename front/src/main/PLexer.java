@@ -1,4 +1,4 @@
-// Generated from /home/ppiedel/IdeaProjects/IRGenerator/front/src/parse/P.g4 by ANTLR 4.7
+// Generated from /home/ppiedel/IdeaProjects/Compiler/front/src/main/P.g4 by ANTLR 4.7
 package main;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

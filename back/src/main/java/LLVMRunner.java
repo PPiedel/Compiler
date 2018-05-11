@@ -3,12 +3,13 @@ import java.io.InputStreamReader;
 
 public class LLVMRunner {
 
-    public static void main(String[] args)
+    public static void createExectuble()
     {
         Process process = null;
         try
         {
-            process = Runtime.getRuntime().exec("./start.sh");
+            String script = "./makeExecutableAndRun.sh";
+            process = Runtime.getRuntime().exec(script);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;

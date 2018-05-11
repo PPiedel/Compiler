@@ -1,27 +1,29 @@
 package main;
 
+import main.ir_generator.IRGenerator;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import util.Util;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IRGenerator {
+public class Front {
+    public static final String LL_FILE_NAME = "code.ll";
 
     static class Program {
         List<Statement> statements = new ArrayList<Statement>();
     }
 
 
-    static abstract class Statement {
+    public static abstract class Statement {
     }
 
-    static public class StatementExpression extends Statement {
+    public static class StatementExpression extends Statement {
         private final Expression expr;
 
         public StatementExpression(Expression expr) {
@@ -126,7 +128,7 @@ public class IRGenerator {
         }
     }
 
-    public static void parse(String filePath) throws IOException {
+    public static void run(String filePath) throws IOException {
         PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(filePath)));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         PParser parser = new PParser(tokens);
@@ -137,10 +139,20 @@ public class IRGenerator {
         walker.walk(new PBaseListener(), tree);
 
         System.out.println("Program statements : ");
-        for (Statement statement : ((PParser.ProgramContext) tree).val.statements) {
+        PParser.ProgramContext program = (PParser.ProgramContext) tree;
+        List<Statement> statements = program.val.statements;
+        for (Statement statement : statements) {
             System.out.println(statement);
         }
 
+        generateLL(program.val);
 
+    }
+
+    private static void generateLL(Program program) {
+        IRGenerator irGenerator = new IRGenerator(program.statements);
+        String intermediateRepresentation = irGenerator.generateIR();
+
+        Util.writeIRToFile(intermediateRepresentation,new File(LL_FILE_NAME));
     }
 }

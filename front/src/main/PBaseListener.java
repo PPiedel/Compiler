@@ -1,11 +1,9 @@
-// Generated from /home/ppiedel/IdeaProjects/IRGenerator/front/src/parse/P.g4 by ANTLR 4.7
+// Generated from /home/ppiedel/IdeaProjects/Compiler/front/src/main/P.g4 by ANTLR 4.7
 package main;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
-
-import java.text.ParseException;
 
 /**
  * This class provides an empty implementation of {@link PListener},
@@ -109,7 +107,5 @@ public class PBaseListener implements PListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void visitErrorNode(ErrorNode node) {
-
-    }
+	@Override public void visitErrorNode(ErrorNode node) { }
 }

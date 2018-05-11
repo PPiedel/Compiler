@@ -1,4 +1,4 @@
-// Generated from /home/ppiedel/IdeaProjects/IRGenerator/front/src/parse/P.g4 by ANTLR 4.7
+// Generated from /home/ppiedel/IdeaProjects/Front/front/src/run/P.g4 by ANTLR 4.7
 package main;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -80,7 +80,7 @@ public class PParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
-		public IRGenerator.Program val;
+		public Front.Program val;
 		public StatementContext statement;
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
@@ -109,7 +109,7 @@ public class PParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			 ((ProgramContext)_localctx).val =  new IRGenerator.Program();
+			 ((ProgramContext)_localctx).val =  new Front.Program();
 			setState(16);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -169,7 +169,7 @@ public class PParser extends Parser {
 	}
 
 	public static class BodyContext extends ParserRuleContext {
-		public IRGenerator.Body val;
+		public Front.Body val;
 		public StatementContext a;
 		public StatementContext b;
 		public List<StatementContext> statement() {
@@ -223,7 +223,7 @@ public class PParser extends Parser {
 				}
 				setState(39);
 				((BodyContext)_localctx).a = statement();
-				 ((BodyContext)_localctx).val =  new IRGenerator.Body(); _localctx.val.add(((BodyContext)_localctx).a.val);
+				 ((BodyContext)_localctx).val =  new Front.Body(); _localctx.val.add(((BodyContext)_localctx).a.val);
 				setState(51);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
@@ -288,7 +288,7 @@ public class PParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
-		public IRGenerator.Statement val;
+		public Front.Statement val;
 		public ExpressionContext a;
 		public Variable_declarationContext c;
 		public ExpressionContext expression() {
@@ -324,7 +324,7 @@ public class PParser extends Parser {
 				{
 				setState(63);
 				((StatementContext)_localctx).a = expression();
-				((StatementContext)_localctx).val =  new IRGenerator.StatementExpression(((StatementContext)_localctx).a.val);
+				((StatementContext)_localctx).val =  new Front.StatementExpression(((StatementContext)_localctx).a.val);
 				}
 				break;
 			case INT:
@@ -352,7 +352,7 @@ public class PParser extends Parser {
 	}
 
 	public static class ExpressionContext extends ParserRuleContext {
-		public IRGenerator.Expression val;
+		public Front.Expression val;
 		public Token a;
 		public AssignmentContext d;
 		public TerminalNode NUMBER() { return getToken(PParser.NUMBER, 0); }
@@ -385,7 +385,7 @@ public class PParser extends Parser {
 				{
 				setState(71);
 				((ExpressionContext)_localctx).a = match(NUMBER);
-				 ((ExpressionContext)_localctx).val =  new IRGenerator.IntExpression((((ExpressionContext)_localctx).a!=null?((ExpressionContext)_localctx).a.getText():null));
+				 ((ExpressionContext)_localctx).val =  new Front.IntExpression((((ExpressionContext)_localctx).a!=null?((ExpressionContext)_localctx).a.getText():null));
 				}
 				break;
 			case ID:
@@ -412,7 +412,7 @@ public class PParser extends Parser {
 	}
 
 	public static class AssignmentContext extends ParserRuleContext {
-		public IRGenerator.Assignment val;
+		public Front.Assignment val;
 		public Token to;
 		public ExpressionContext what;
 		public TerminalNode ID() { return getToken(PParser.ID, 0); }
@@ -445,7 +445,7 @@ public class PParser extends Parser {
 			match(T__3);
 			setState(80);
 			((AssignmentContext)_localctx).what = expression();
-			 ((AssignmentContext)_localctx).val =  new IRGenerator.Assignment((((AssignmentContext)_localctx).to!=null?((AssignmentContext)_localctx).to.getText():null), ((AssignmentContext)_localctx).what.val);
+			 ((AssignmentContext)_localctx).val =  new Front.Assignment((((AssignmentContext)_localctx).to!=null?((AssignmentContext)_localctx).to.getText():null), ((AssignmentContext)_localctx).what.val);
 			}
 		}
 		catch (RecognitionException re) {
@@ -460,7 +460,7 @@ public class PParser extends Parser {
 	}
 
 	public static class Variable_declarationContext extends ParserRuleContext {
-		public IRGenerator.VariableDeclaration val;
+		public Front.VariableDeclaration val;
 		public Token name;
 		public TerminalNode ID() { return getToken(PParser.ID, 0); }
 		public Variable_declarationContext(ParserRuleContext parent, int invokingState) {
@@ -491,7 +491,7 @@ public class PParser extends Parser {
 				match(INT);
 				setState(84);
 				((Variable_declarationContext)_localctx).name = match(ID);
-				 ((Variable_declarationContext)_localctx).val =  new IRGenerator.IntVariableDeclaration((((Variable_declarationContext)_localctx).name!=null?((Variable_declarationContext)_localctx).name.getText():null));
+				 ((Variable_declarationContext)_localctx).val =  new Front.IntVariableDeclaration((((Variable_declarationContext)_localctx).name!=null?((Variable_declarationContext)_localctx).name.getText():null));
 				}
 				break;
 			case FLOAT:
@@ -501,7 +501,7 @@ public class PParser extends Parser {
 				match(FLOAT);
 				setState(87);
 				((Variable_declarationContext)_localctx).name = match(ID);
-				 ((Variable_declarationContext)_localctx).val =  new IRGenerator.FloatVariableDeclaration((((Variable_declarationContext)_localctx).name!=null?((Variable_declarationContext)_localctx).name.getText():null));
+				 ((Variable_declarationContext)_localctx).val =  new Front.FloatVariableDeclaration((((Variable_declarationContext)_localctx).name!=null?((Variable_declarationContext)_localctx).name.getText():null));
 				}
 				break;
 			default:
