@@ -10,16 +10,57 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Front {
     private static final String LL_FILE_NAME = "code.ll";
     private static final String GLOBAL_INT = "@%s = global i32 %d, align 4";
     private static final String GLOBAL_FLOAT = "@%s = global float %f, align 4";
+    private static final String PRINT_ID = "@printf( i8* getelementptr ([4 x i8]* @str, i32 0, i32 0), i32 %%%s)";
 
 
-    static class Program {
+    public static class Program {
         List<Statement> statements = new ArrayList<Statement>();
+        List<Function> functions = new ArrayList<Function>();
+
+        public List<Statement> getStatements() {
+            return statements;
+        }
+
+        public List<Function> getFunctions() {
+            return functions;
+        }
+    }
+
+    static public class Function {
+        private final String name;
+        private List<String> m_arguments = new ArrayList<String>();
+        private Body m_body;
+        private String returnType;
+
+        public Function(String name, String returnType) {
+            this.name = name;
+            this.returnType = returnType;
+        }
+
+        public void addArg(String name) {
+            m_arguments.add(name);
+        }
+
+        public void setBody(Body b) {
+            m_body = b;
+        }
+
+        @Override
+        public String toString() {
+            return "Function{" +
+                    "name='" + name + '\'' +
+                    ", m_arguments=" + m_arguments +
+                    ", m_body=" + m_body +
+                    ", returnType='" + returnType + '\'' +
+                    '}';
+        }
     }
 
 
@@ -44,6 +85,30 @@ public class Front {
         @Override
         public String getIRCode() {
             return "";
+        }
+    }
+
+    static abstract class PrintStatement  extends Statement{
+
+    }
+
+    static class PrintIDStatement extends PrintStatement {
+        private final String id;
+
+        public PrintIDStatement(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public String getIRCode() {
+            return String.format(PRINT_ID,id);
+        }
+
+        @Override
+        public String toString() {
+            return "PrintIDStatement{" +
+                    "id='" + id + '\'' +
+                    '}';
         }
     }
 
@@ -101,6 +166,7 @@ public class Front {
     }
 
     static abstract class Expression {
+        public abstract String getIRCode();
     }
 
     static public class IntExpression extends Expression {
@@ -119,6 +185,11 @@ public class Front {
             return "IntExpression{" +
                     "m_data='" + m_data + '\'' +
                     '}';
+        }
+
+        @Override
+        public String getIRCode() {
+            return null;
         }
     }
 
@@ -139,6 +210,11 @@ public class Front {
                     ", mWhat=" + mWhat +
                     '}';
         }
+
+        @Override
+        public String getIRCode() {
+            return null;
+        }
     }
 
     static public class Body {
@@ -150,6 +226,13 @@ public class Front {
 
         void add(Statement stmt) {
             statements.add(stmt);
+        }
+
+        @Override
+        public String toString() {
+            return "Body{" +
+                    "statements=" + statements +
+                    '}';
         }
     }
 
@@ -163,11 +246,18 @@ public class Front {
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(new PBaseListener(), tree);
 
-        System.out.println("Program statements : ");
+
         PParser.ProgramContext program = (PParser.ProgramContext) tree;
         List<Statement> statements = program.val.statements;
+        System.out.println("Program statements : ");
         for (Statement statement : statements) {
             System.out.println(statement);
+        }
+
+        List<Function> functions = program.val.functions;
+        System.out.println("Program functions : ");
+        for (Function fun : functions){
+            System.out.println(fun.toString());
         }
 
         generateLL(program.val);
@@ -175,7 +265,7 @@ public class Front {
     }
 
     private static void generateLL(Program program) {
-        IRGenerator irGenerator = new IRGenerator(program.statements);
+        IRGenerator irGenerator = new IRGenerator(program);
         String intermediateRepresentation = irGenerator.generateIR();
 
         Util.writeIRToFile(intermediateRepresentation,new File(LL_FILE_NAME));

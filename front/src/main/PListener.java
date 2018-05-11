@@ -28,6 +28,16 @@ public interface PListener extends ParseTreeListener {
 	 */
 	void exitBody(PParser.BodyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link PParser#function}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction(PParser.FunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PParser#function}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction(PParser.FunctionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link PParser#statement}.
 	 * @param ctx the parse tree
 	 */
@@ -67,4 +77,14 @@ public interface PListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVariable_declaration(PParser.Variable_declarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PParser#print}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrint(PParser.PrintContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PParser#print}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrint(PParser.PrintContext ctx);
 }

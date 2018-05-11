@@ -16,9 +16,11 @@ public final class IRGenerator {
             "!0 = !{!\"clang version 3.8.0-2ubuntu4 (tags/RELEASE_380/final)\"}";
 
     private final List<Front.Statement> statements;
+    private final List<Front.Function> functions;
 
-    public IRGenerator(List<Front.Statement> statements) {
-        this.statements = statements;
+    public IRGenerator(Front.Program program) {
+        this.statements = program.getStatements();
+        this.functions = program.getFunctions();
     }
 
     public String generateIR(){
@@ -30,6 +32,10 @@ public final class IRGenerator {
         for (Front.Statement statement : statements){
             ir.append(statement.getIRCode()).append(newLine);
         }
+
+        /*for (Front.Function function : functions){
+            ir.append(function.getIrCode());
+        }*/
 
         ir.append(END);
 
