@@ -1,4 +1,4 @@
-// Generated from /home/ppiedel/IdeaProjects/Compiler/front/src/main/P.g4 by ANTLR 4.7
+// Generated from /home/ppiedel/IdeaProjects/IRGenerator/front/src/main/P.g4 by ANTLR 4.7
 package main;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -18,9 +18,9 @@ public class PParser extends Parser {
 		WS=10;
 	public static final int
 		RULE_program = 0, RULE_body = 1, RULE_statement = 2, RULE_expression = 3, 
-		RULE_assignment = 4, RULE_variable_definition = 5;
+		RULE_assignment = 4, RULE_variable_declaration = 5;
 	public static final String[] ruleNames = {
-		"program", "body", "statement", "expression", "assignment", "variable_definition"
+		"program", "body", "statement", "expression", "assignment", "variable_declaration"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -80,7 +80,7 @@ public class PParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
-		public Compiler.Program val;
+		public IRGenerator.Program val;
 		public StatementContext statement;
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
@@ -109,7 +109,7 @@ public class PParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			 ((ProgramContext)_localctx).val =  new Compiler.Program(); 
+			 ((ProgramContext)_localctx).val =  new IRGenerator.Program();
 			setState(16);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -169,7 +169,7 @@ public class PParser extends Parser {
 	}
 
 	public static class BodyContext extends ParserRuleContext {
-		public Compiler.Body val;
+		public IRGenerator.Body val;
 		public StatementContext a;
 		public StatementContext b;
 		public List<StatementContext> statement() {
@@ -223,7 +223,7 @@ public class PParser extends Parser {
 				}
 				setState(39);
 				((BodyContext)_localctx).a = statement();
-				 ((BodyContext)_localctx).val =  new Compiler.Body(); _localctx.val.add(((BodyContext)_localctx).a.val); 
+				 ((BodyContext)_localctx).val =  new IRGenerator.Body(); _localctx.val.add(((BodyContext)_localctx).a.val);
 				setState(51);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
@@ -288,14 +288,14 @@ public class PParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
-		public Compiler.Statement val;
+		public IRGenerator.Statement val;
 		public ExpressionContext a;
-		public Variable_definitionContext c;
+		public Variable_declarationContext c;
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public Variable_definitionContext variable_definition() {
-			return getRuleContext(Variable_definitionContext.class,0);
+		public Variable_declarationContext variable_declaration() {
+			return getRuleContext(Variable_declarationContext.class,0);
 		}
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -324,7 +324,7 @@ public class PParser extends Parser {
 				{
 				setState(63);
 				((StatementContext)_localctx).a = expression();
-				((StatementContext)_localctx).val =  new Compiler.StatementExpression(((StatementContext)_localctx).a.val); 
+				((StatementContext)_localctx).val =  new IRGenerator.StatementExpression(((StatementContext)_localctx).a.val);
 				}
 				break;
 			case INT:
@@ -332,7 +332,7 @@ public class PParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(66);
-				((StatementContext)_localctx).c = variable_definition();
+				((StatementContext)_localctx).c = variable_declaration();
 				 ((StatementContext)_localctx).val =  ((StatementContext)_localctx).c.val; 
 				}
 				break;
@@ -352,7 +352,7 @@ public class PParser extends Parser {
 	}
 
 	public static class ExpressionContext extends ParserRuleContext {
-		public Compiler.Expression val;
+		public IRGenerator.Expression val;
 		public Token a;
 		public AssignmentContext d;
 		public TerminalNode NUMBER() { return getToken(PParser.NUMBER, 0); }
@@ -385,7 +385,7 @@ public class PParser extends Parser {
 				{
 				setState(71);
 				((ExpressionContext)_localctx).a = match(NUMBER);
-				 ((ExpressionContext)_localctx).val =  new Compiler.IntExpression((((ExpressionContext)_localctx).a!=null?((ExpressionContext)_localctx).a.getText():null)); 
+				 ((ExpressionContext)_localctx).val =  new IRGenerator.IntExpression((((ExpressionContext)_localctx).a!=null?((ExpressionContext)_localctx).a.getText():null));
 				}
 				break;
 			case ID:
@@ -412,7 +412,7 @@ public class PParser extends Parser {
 	}
 
 	public static class AssignmentContext extends ParserRuleContext {
-		public Compiler.Assignment val;
+		public IRGenerator.Assignment val;
 		public Token to;
 		public ExpressionContext what;
 		public TerminalNode ID() { return getToken(PParser.ID, 0); }
@@ -445,7 +445,7 @@ public class PParser extends Parser {
 			match(T__3);
 			setState(80);
 			((AssignmentContext)_localctx).what = expression();
-			 ((AssignmentContext)_localctx).val =  new Compiler.Assignment((((AssignmentContext)_localctx).to!=null?((AssignmentContext)_localctx).to.getText():null), ((AssignmentContext)_localctx).what.val); 
+			 ((AssignmentContext)_localctx).val =  new IRGenerator.Assignment((((AssignmentContext)_localctx).to!=null?((AssignmentContext)_localctx).to.getText():null), ((AssignmentContext)_localctx).what.val);
 			}
 		}
 		catch (RecognitionException re) {
@@ -459,27 +459,27 @@ public class PParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Variable_definitionContext extends ParserRuleContext {
-		public Compiler.VariableDefinition val;
+	public static class Variable_declarationContext extends ParserRuleContext {
+		public IRGenerator.VariableDeclaration val;
 		public Token name;
 		public TerminalNode ID() { return getToken(PParser.ID, 0); }
-		public Variable_definitionContext(ParserRuleContext parent, int invokingState) {
+		public Variable_declarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_variable_definition; }
+		@Override public int getRuleIndex() { return RULE_variable_declaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof PListener ) ((PListener)listener).enterVariable_definition(this);
+			if ( listener instanceof PListener ) ((PListener)listener).enterVariable_declaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof PListener ) ((PListener)listener).exitVariable_definition(this);
+			if ( listener instanceof PListener ) ((PListener)listener).exitVariable_declaration(this);
 		}
 	}
 
-	public final Variable_definitionContext variable_definition() throws RecognitionException {
-		Variable_definitionContext _localctx = new Variable_definitionContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_variable_definition);
+	public final Variable_declarationContext variable_declaration() throws RecognitionException {
+		Variable_declarationContext _localctx = new Variable_declarationContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_variable_declaration);
 		try {
 			setState(89);
 			_errHandler.sync(this);
@@ -490,8 +490,8 @@ public class PParser extends Parser {
 				setState(83);
 				match(INT);
 				setState(84);
-				((Variable_definitionContext)_localctx).name = match(ID);
-				 ((Variable_definitionContext)_localctx).val =  new Compiler.IntVariableDefinition((((Variable_definitionContext)_localctx).name!=null?((Variable_definitionContext)_localctx).name.getText():null)); 
+				((Variable_declarationContext)_localctx).name = match(ID);
+				 ((Variable_declarationContext)_localctx).val =  new IRGenerator.IntVariableDeclaration((((Variable_declarationContext)_localctx).name!=null?((Variable_declarationContext)_localctx).name.getText():null));
 				}
 				break;
 			case FLOAT:
@@ -500,8 +500,8 @@ public class PParser extends Parser {
 				setState(86);
 				match(FLOAT);
 				setState(87);
-				((Variable_definitionContext)_localctx).name = match(ID);
-				 ((Variable_definitionContext)_localctx).val =  new Compiler.FloatVariableDefinition((((Variable_definitionContext)_localctx).name!=null?((Variable_definitionContext)_localctx).name.getText():null)); 
+				((Variable_declarationContext)_localctx).name = match(ID);
+				 ((Variable_declarationContext)_localctx).val =  new IRGenerator.FloatVariableDeclaration((((Variable_declarationContext)_localctx).name!=null?((Variable_declarationContext)_localctx).name.getText():null));
 				}
 				break;
 			default:

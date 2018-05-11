@@ -1,4 +1,4 @@
-// Generated from /home/ppiedel/IdeaProjects/Compiler/front/src/main/P.g4 by ANTLR 4.7
+// Generated from /home/ppiedel/IdeaProjects/IRGenerator/front/src/main/P.g4 by ANTLR 4.7
 package main;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -76,13 +76,13 @@ public class PBaseListener implements PListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariable_definition(PParser.Variable_definitionContext ctx) { }
+	@Override public void enterVariable_declaration(PParser.Variable_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariable_definition(PParser.Variable_definitionContext ctx) { }
+	@Override public void exitVariable_declaration(PParser.Variable_declarationContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

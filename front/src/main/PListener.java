@@ -1,4 +1,4 @@
-// Generated from /home/ppiedel/IdeaProjects/Compiler/front/src/main/P.g4 by ANTLR 4.7
+// Generated from /home/ppiedel/IdeaProjects/IRGenerator/front/src/main/P.g4 by ANTLR 4.7
 package main;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -58,13 +58,13 @@ public interface PListener extends ParseTreeListener {
 	 */
 	void exitAssignment(PParser.AssignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PParser#variable_definition}.
+	 * Enter a parse tree produced by {@link PParser#variable_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariable_definition(PParser.Variable_definitionContext ctx);
+	void enterVariable_declaration(PParser.Variable_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link PParser#variable_definition}.
+	 * Exit a parse tree produced by {@link PParser#variable_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariable_definition(PParser.Variable_definitionContext ctx);
+	void exitVariable_declaration(PParser.Variable_declarationContext ctx);
 }

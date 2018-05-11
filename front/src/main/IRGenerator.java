@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Compiler {
+public class IRGenerator {
 
     static public class Program {
         public List<Statement> statements = new ArrayList<Statement>();
@@ -33,15 +33,15 @@ public class Compiler {
         }
     }
 
-    public static abstract class VariableDefinition extends Statement{
+    public static abstract class VariableDeclaration extends Statement{
 
     }
 
 
-    static public class IntVariableDefinition extends VariableDefinition{
+    static public class IntVariableDeclaration extends VariableDeclaration {
         private final String varName;
 
-        public IntVariableDefinition(String varName) {
+        public IntVariableDeclaration(String varName) {
             this.varName = varName;
         }
 
@@ -51,22 +51,22 @@ public class Compiler {
 
         @Override
         public String toString() {
-            return "IntVariableDefinition{" +
+            return "IntVariableDeclaration{" +
                     "varName='" + varName + '\'' +
                     '}';
         }
     }
 
-    static public class FloatVariableDefinition extends VariableDefinition{
+    static public class FloatVariableDeclaration extends VariableDeclaration {
         private final String varName;
 
-        public FloatVariableDefinition(String varName) {
+        public FloatVariableDeclaration(String varName) {
             this.varName = varName;
         }
 
         @Override
         public String toString() {
-            return "FloatVariableDefinition{" +
+            return "FloatVariableDeclaration{" +
                     "varName='" + varName + '\'' +
                     '}';
         }

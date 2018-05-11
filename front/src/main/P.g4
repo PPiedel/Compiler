@@ -1,35 +1,35 @@
 grammar P;
 
-program returns [Compiler.Program val] :
-    { $val = new Compiler.Program(); } (';')* ((statement ';'+) { $val.statements.add($statement.val); })*;
+program returns [IRGenerator.Program val] :
+    { $val = new IRGenerator.Program(); } (';')* ((statement ';'+) { $val.statements.add($statement.val); })*;
 
-body returns [Compiler.Body val] :
+body returns [IRGenerator.Body val] :
     '{'
-    ((';')* a = statement { $val = new Compiler.Body(); $val.add($a.val); }
+    ((';')* a = statement { $val = new IRGenerator.Body(); $val.add($a.val); }
         ((';')+ b = statement { $val.add($b.val); })*
     (';')+)?
     '}'
 ;
 
-statement returns [Compiler.Statement val] :
-    a = expression {$val = new Compiler.StatementExpression($a.val); } |
-    c = variable_definition { $val = $c.val; }
+statement returns [IRGenerator.Statement val] :
+    a = expression {$val = new IRGenerator.StatementExpression($a.val); } |
+    c = variable_declaration { $val = $c.val; }
 ;
 
 
-expression returns [Compiler.Expression val] :
-    a = NUMBER { $val = new Compiler.IntExpression($a.text); } |
+expression returns [IRGenerator.Expression val] :
+    a = NUMBER { $val = new IRGenerator.IntExpression($a.text); } |
     d = assignment { $val = $d.val; }
 ;
 
 
-assignment returns [Compiler.Assignment val] :
-    to = ID '=' what = expression { $val = new Compiler.Assignment($to.text, $what.val); }
+assignment returns [IRGenerator.Assignment val] :
+    to = ID '=' what = expression { $val = new IRGenerator.Assignment($to.text, $what.val); }
 ;
 
-variable_definition returns [Compiler.VariableDefinition val] :
-    'int' name = ID { $val = new Compiler.IntVariableDefinition($name.text); } |
-    'float' name = ID { $val = new Compiler.FloatVariableDefinition($name.text); }
+variable_declaration returns [IRGenerator.VariableDeclaration val] :
+    'int' name = ID { $val = new IRGenerator.IntVariableDeclaration($name.text); } |
+    'float' name = ID { $val = new IRGenerator.FloatVariableDeclaration($name.text); }
 ;
 
 
