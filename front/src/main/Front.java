@@ -13,11 +13,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static main.ir_generator.IRTemplate.GLOBAL_FLOAT;
+import static main.ir_generator.IRTemplate.GLOBAL_INT;
+import static main.ir_generator.IRTemplate.PRINT_ID;
+
 public class Front {
     private static final String LL_FILE_NAME = "code.ll";
-    private static final String GLOBAL_INT = "@%s = global i32 %d, align 4";
-    private static final String GLOBAL_FLOAT = "@%s = global float %f, align 4";
-    private static final String PRINT_ID = "@printf( i8* getelementptr ([4 x i8]* @str, i32 0, i32 0), i32 %%%s)";
+    public static final String INT = "int";
+    public static final String FLOAT = "float";
+
+
 
 
     public static class Program {
@@ -50,6 +55,22 @@ public class Front {
 
         public void setBody(Body b) {
             m_body = b;
+        }
+
+        public Body getM_body() {
+            return m_body;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public List<String> getM_arguments() {
+            return m_arguments;
+        }
+
+        public String getReturnType() {
+            return returnType;
         }
 
         @Override

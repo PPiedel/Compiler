@@ -4,16 +4,10 @@ import main.Front;
 
 import java.util.List;
 
-public final class IRGenerator {
-    private final static String BEGIN = "; ModuleID = 'code.c'\n" +
-            "target datalayout = \"e-m:e-i64:64-f80:128-n8:16:32:64-S128\"\n" +
-            "target triple = \"x86_64-pc-linux-gnu\"";
+import static main.ir_generator.IRTemplate.*;
 
-    private final static String END = "attributes #0 = { nounwind uwtable \"disable-tail-calls\"=\"false\" \"less-precise-fpmad\"=\"false\" \"no-frame-pointer-elim\"=\"true\" \"no-frame-pointer-elim-non-leaf\" \"no-infs-fp-math\"=\"false\" \"no-nans-fp-math\"=\"false\" \"stack-protector-buffer-size\"=\"8\" \"target-cpu\"=\"x86-64\" \"target-features\"=\"+fxsr,+mmx,+sse,+sse2\" \"unsafe-fp-math\"=\"false\" \"use-soft-float\"=\"false\" }\n" +
-            "\n" +
-            "!llvm.ident = !{!0}\n" +
-            "\n" +
-            "!0 = !{!\"clang version 3.8.0-2ubuntu4 (tags/RELEASE_380/final)\"}";
+public final class IRGenerator {
+
 
     private final List<Front.Statement> statements;
     private final List<Front.Function> functions;
@@ -23,23 +17,41 @@ public final class IRGenerator {
         this.functions = program.getFunctions();
     }
 
-    public String generateIR(){
+    public String generateIR() {
         StringBuilder ir = new StringBuilder();
 
-        String newLine = "\n";
-
-        ir.append(BEGIN).append(newLine);
+        ir.append(BEGIN).append(NEW_LINE);
         for (Front.Statement statement : statements){
-            ir.append(statement.getIRCode()).append(newLine);
+            ir.append(statement.getIRCode()).append(NEW_LINE);
         }
 
-        /*for (Front.Function function : functions){
-            ir.append(function.getIrCode());
-        }*/
+        for (Front.Function function : functions) {
+            appendFunctionHead(ir, function);
+
+            appendFunctionEnd(ir);
+
+        }
 
         ir.append(END);
 
         return ir.toString();
+    }
+
+    private void appendFunctionEnd(StringBuilder ir) {
+        ir.append(NEW_LINE).append(FUNCTION_END).append(NEW_LINE);
+    }
+
+    private void appendFunctionHead(StringBuilder ir, Front.Function function) {
+        switch (function.getReturnType()) {
+            case ("int"): {
+                ir.append(String.format(IRTemplate.FUNCTION_HEAD, IRTemplate.INT, function.getName(), function.getM_arguments().size()));
+                break;
+            }
+            case ("float"): {
+                ir.append(String.format(IRTemplate.FUNCTION_HEAD, IRTemplate.FLOAT, function.getName(), function.getM_arguments().size()));
+                break;
+            }
+        }
     }
 
 

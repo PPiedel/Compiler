@@ -2,6 +2,9 @@
 int GLOBAL = 5;
 float GLOBAL2 = 6;
 
+fun main() : int {
+}
+
 fun superIntFunkcja() : int {
     int zmienna = 5;
     float drugazmienna = 10;
