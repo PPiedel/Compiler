@@ -1,3 +1,2 @@
-int zmienna;
-zmienna = 5;
-float drugazmienna;
+int zmienna = 5;
+float drugazmienna = 10;

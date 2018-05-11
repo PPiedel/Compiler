@@ -28,8 +28,8 @@ assignment returns [Front.Assignment val] :
 ;
 
 variable_declaration returns [Front.VariableDeclaration val] :
-    'int' name = ID { $val = new Front.IntVariableDeclaration($name.text); } |
-    'float' name = ID { $val = new Front.FloatVariableDeclaration($name.text); }
+    INT name = ID EQUALS  value = NUMBER { $val = new Front.IntVariableDeclaration($name.text,$value.text); } |
+    FLOAT name = ID EQUALS value = NUMBER { $val = new Front.FloatVariableDeclaration($name.text,$value.text); }
 ;
 
 
@@ -43,4 +43,5 @@ NUMBER : '0'..'9'+ ;
 INT : 'int';
 FLOAT : 'float';
 ID  : 'a'..'z'+ ;
+EQUALS : '=';
 WS : (' '|'\r'|'\n') -> skip;

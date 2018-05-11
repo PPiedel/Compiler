@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Front {
-    public static final String LL_FILE_NAME = "code.ll";
+    private static final String LL_FILE_NAME = "code.ll";
+    private static final String GLOBAL_INT = "@%s = global i32 %d, align 4";
+    private static final String GLOBAL_FLOAT = "@%s = global float %f, align 4";
+
 
     static class Program {
         List<Statement> statements = new ArrayList<Statement>();
@@ -21,6 +24,7 @@ public class Front {
 
 
     public static abstract class Statement {
+        public abstract String getIRCode();
     }
 
     public static class StatementExpression extends Statement {
@@ -36,42 +40,63 @@ public class Front {
                     "expr=" + expr +
                     '}';
         }
+
+        @Override
+        public String getIRCode() {
+            return "";
+        }
     }
 
     static abstract class VariableDeclaration extends Statement {
     }
 
     static public class IntVariableDeclaration extends VariableDeclaration {
-        private final String varName;
+        private final String name;
+        private final String value;
 
-        public IntVariableDeclaration(String varName) {
-            this.varName = varName;
+        public IntVariableDeclaration(String name, String value) {
+            this.name = name;
+            this.value = value;
         }
 
-        public String getVarName() {
-            return varName;
+        public String getName() {
+            return name;
         }
 
         @Override
         public String toString() {
             return "IntVariableDeclaration{" +
-                    "varName='" + varName + '\'' +
+                    "name='" + name + '\'' +
+                    ", value='" + value + '\'' +
                     '}';
+        }
+
+        @Override
+        public String getIRCode() {
+            return String.format(GLOBAL_INT,name,Integer.parseInt(value));
         }
     }
 
     static public class FloatVariableDeclaration extends VariableDeclaration {
-        private final String varName;
+        private final String name;
+        private final String value;
 
-        public FloatVariableDeclaration(String varName) {
-            this.varName = varName;
+        public FloatVariableDeclaration(String name, String value) {
+            this.name = name;
+            this.value = value;
         }
 
         @Override
         public String toString() {
             return "FloatVariableDeclaration{" +
-                    "varName='" + varName + '\'' +
+                    "name='" + name + '\'' +
+                    ", value='" + value + '\'' +
                     '}';
+        }
+
+        @Override
+        public String getIRCode() {
+            return String.format(GLOBAL_FLOAT, name,Float.parseFloat(value));
         }
     }
 
