@@ -1,21 +1,24 @@
 package main;
 
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class IRGenerator {
 
-    static public class Program {
-        public List<Statement> statements = new ArrayList<Statement>();
+    static class Program {
+        List<Statement> statements = new ArrayList<Statement>();
     }
 
 
-
-    static public abstract class Statement {
-
+    static abstract class Statement {
     }
 
     static public class StatementExpression extends Statement {
@@ -33,10 +36,8 @@ public class IRGenerator {
         }
     }
 
-    public static abstract class VariableDeclaration extends Statement{
-
+    static abstract class VariableDeclaration extends Statement {
     }
-
 
     static public class IntVariableDeclaration extends VariableDeclaration {
         private final String varName;
@@ -72,8 +73,8 @@ public class IRGenerator {
         }
     }
 
-
-    static public abstract class Expression {}
+    static abstract class Expression {
+    }
 
     static public class IntExpression extends Expression {
         private final String m_data;
@@ -94,7 +95,6 @@ public class IRGenerator {
         }
     }
 
-
     static public class Assignment extends Expression {
         private final String to;
         private final Expression mWhat;
@@ -114,7 +114,6 @@ public class IRGenerator {
         }
     }
 
-
     static public class Body {
         private List<Statement> statements = new ArrayList<Statement>();
 
@@ -122,23 +121,26 @@ public class IRGenerator {
 
         }
 
-        public void add(Statement stmt) {
+        void add(Statement stmt) {
             statements.add(stmt);
         }
     }
 
-    public static void main(String[] args) {
-        try {
+    public static void parse(String filePath) throws IOException {
+        PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(filePath)));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        PParser parser = new PParser(tokens);
 
-            PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader("code.P")));
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            PParser parser = new PParser(tokens);
-            Program def = parser.program().val;
-            for (Statement statement : def.statements){
-                System.out.println(statement);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
+
+        ParseTree tree = parser.program();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        walker.walk(new PBaseListener(), tree);
+
+        System.out.println("Program statements : ");
+        for (Statement statement : ((PParser.ProgramContext) tree).val.statements) {
+            System.out.println(statement);
         }
+
+
     }
 }

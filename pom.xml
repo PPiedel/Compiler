@@ -12,7 +12,7 @@
     <modules>
         <module>front</module>
         <module>back</module>
-        <module>back</module>
+        <module>compiler</module>
     </modules>
 
 
