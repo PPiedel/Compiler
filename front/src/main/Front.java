@@ -18,7 +18,7 @@ public class Front {
     private static final String LL_FILE_NAME = "code.ll";
     public static final String INT = "int";
     public static final String FLOAT = "float";
-
+    private static int COUNTER = 1;
 
 
 
@@ -163,7 +163,10 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return String.format(PRINT_ID,id);
+            int counterState = COUNTER;
+            String ir = String.format(PRINT_ID,counterState,id,COUNTER+1,counterState);
+            COUNTER+=2;
+            return ir;
         }
 
         @Override

@@ -1,16 +1,8 @@
 fun main() : int {
     int zmienna = 5;
-    float drugazmienna = 10.0;
+    int zmienna2 = 8;
+
+    print(zmienna);
+    print(zmienna2);
     return 0;
 }
-
-fun superIntFunkcja() : int {
-
-    return 0;
-};
-
-fun superFloatFunkcja() : float {
-    int zmienna = 5;
-    float drugazmienna = 10.5;
-    return 5.0;
-};

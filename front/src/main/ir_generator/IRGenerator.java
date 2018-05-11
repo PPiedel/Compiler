@@ -20,11 +20,24 @@ public final class IRGenerator {
     public String generateIR() {
         StringBuilder ir = new StringBuilder();
 
-        ir.append(BEGIN).append(NEW_LINE);
+        beginFile(ir);
+
+        processGlobalStatements(ir);
+
+        processFunctions(ir);
+
+        endFile(ir);
+
+        return ir.toString();
+    }
+
+    private void processGlobalStatements(StringBuilder ir) {
         for (Front.Statement statement : statements){
             ir.append(statement.getIRCode()).append(NEW_LINE);
         }
+    }
 
+    private void processFunctions(StringBuilder ir) {
         for (Front.Function function : functions) {
             appendFunctionHead(ir, function);
             if (function.getBody()!=null){
@@ -36,10 +49,16 @@ public final class IRGenerator {
             appendFunctionEnd(ir);
 
         }
+    }
 
+    private void endFile(StringBuilder ir) {
+        ir.append(PRINTF_DECLARATION);
         ir.append(END);
+    }
 
-        return ir.toString();
+    private void beginFile(StringBuilder ir) {
+        ir.append(BEGIN).append(NEW_LINE);
+        ir.append(STR_CONSTATNT);
     }
 
     private void appendFunctionEnd(StringBuilder ir) {
