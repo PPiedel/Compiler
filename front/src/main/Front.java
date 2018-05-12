@@ -20,6 +20,7 @@ public class Front {
     private static final String INT = "int";
     private static final String FLOAT = "float";
     private static final String STRING = "String";
+    private static String INT_ARRAY = "INT_ARRAY";
 
     private static int COUNTER = 1;
     private static Map<String, String> typesMemory = new HashMap<>();
@@ -253,6 +254,41 @@ public class Front {
 
     static abstract class VariableDeclaration extends Statement {
         public abstract void addToMemory();
+    }
+
+    public static abstract class Array extends VariableDeclaration {
+
+    }
+
+    public static class ArrayInt extends Array {
+        private final String name;
+        private final String size;
+
+        public ArrayInt(String name, String size) {
+            this.name = name;
+            this.size = size;
+        }
+
+        @Override
+        public String getIRCode(String functionName) {
+            int counterState = COUNTER;
+            String iR = String.format(ARRAY_DECLARATION, counterState, counterState, name, Integer.parseInt(size), IRTemplate.INT);
+            COUNTER++;
+            return iR;
+        }
+
+        @Override
+        public void addToMemory() {
+            typesMemory.put(name, INT_ARRAY);
+        }
+
+        @Override
+        public String toString() {
+            return "ArrayInt{" +
+                    "name='" + name + '\'' +
+                    ", size='" + size + '\'' +
+                    '}';
+        }
     }
 
     public static class StringVariableDeclaration extends VariableDeclaration {

@@ -46,9 +46,13 @@ public class IRTemplate {
     public static final String MULTIPLY_INT = "\n\t%%%d = mul nsw i32 %%%d, %%%d";
     public static final String DIVIDE_INT = "\n\t%%%d = sdiv i32 %%%d, %%%d";
     public static final String DIVIDE_FLOAT = "\n\t%%%d = fdiv float %%%d, %%%d";
-
     public static final String STORE_INT = "\n\tstore i32 %%%d, i32* %%%s, align 4\n";
     public static final String STORE_FLOAT = "'\nstore float %%%d, float* %%%s, align 4";
+
+    //array
+    public static final String ARRAY_DECLARATION = "\n\t%%%d = alloca i32, align 4" +
+            "\n\tstore i32 0, i32* %%%d, align 4" +
+            "\n\t%%%s = alloca [%d x %s], align 16";
 
 
     //string

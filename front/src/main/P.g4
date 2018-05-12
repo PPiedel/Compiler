@@ -30,7 +30,7 @@ statement returns [Front.Statement val] :
     c = variable_declaration { $val = $c.val; } |
     d = print{{ $val = $d.val; } } |
     e = returnst{{ $val = $e.val; } } |
-    f = read{{ $val = $f.val; } }
+    f = read {{ $val = $f.val; } }
 ;
 
 
@@ -53,7 +53,12 @@ assignment returns [Front.Assignment val] :
 variable_declaration returns [Front.VariableDeclaration val] :
     INT name = ID EQUALS  value = NUMBER { $val = new Front.IntVariableDeclaration($name.text,$value.text); } |
     FLOAT name = ID EQUALS value = NUMBER_FLOAT { $val = new Front.FloatVariableDeclaration($name.text,$value.text); } |
-    STRING name = ID  EQUALS value = STRING_LITERAL { $val = new Front.StringVariableDeclaration($name.text,$value.text); }
+    STRING name = ID  EQUALS value = STRING_LITERAL { $val = new Front.StringVariableDeclaration($name.text,$value.text); } |
+    f = array {{ $val = $f.val; } }
+;
+
+array returns [Front.Array val] :
+    INT LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET name = ID EQUALS NEW INT LEFT_SQUARE_BRACKET size = NUMBER  RIGHT_SQUARE_BRACKET {$val = new Front.ArrayInt($name.text, $size.text);}
 ;
 
 print returns [Front.PrintStatement val] :
@@ -70,8 +75,8 @@ read returns [Front.Read val] :
     READ_FLOAT LEFT_BRACKET reference = ID RIGHT_BRACKET {$val = new Front.ReadFloat($reference.text);} |
 ;
 
-
-
+NEW : 'new'
+;
 
 NUMBER : DIGIT+ ;
 
@@ -148,6 +153,12 @@ LEFT_BRACKET : '('
 ;
 
 RIGHT_BRACKET : ')'
+;
+
+LEFT_SQUARE_BRACKET : '['
+;
+
+RIGHT_SQUARE_BRACKET : ']'
 ;
 
 WS
