@@ -53,7 +53,7 @@ assignment returns [Front.Assignment val] :
 variable_declaration returns [Front.VariableDeclaration val] :
     INT name = ID EQUALS  value = NUMBER { $val = new Front.IntVariableDeclaration($name.text,$value.text); } |
     FLOAT name = ID EQUALS value = NUMBER_FLOAT { $val = new Front.FloatVariableDeclaration($name.text,$value.text); } |
-    STRING name = ID  EQUALS STRING_LITERAL { $val = new Front.StringVariableDeclaration($name.text,$STRING_LITERAL.text); }
+    STRING name = ID  EQUALS value = STRING_LITERAL { $val = new Front.StringVariableDeclaration($name.text,$value.text); }
 ;
 
 print returns [Front.PrintStatement val] :
@@ -71,9 +71,7 @@ read returns [Front.Read val] :
 ;
 
 
-COMMENT
-    :   ( '//' ~[\r\n]* '\r'? '\n' | '/*' .*? '*/') -> skip
-    ;
+
 
 NUMBER : DIGIT+ ;
 
@@ -94,7 +92,7 @@ STRING : 'String'
 ;
 
 STRING_LITERAL
-	:	'"' StringCharacters? '"'
+	:	'"'StringCharacters?'"'
 	;
 
 fragment
@@ -104,7 +102,7 @@ StringCharacters
 
 fragment
 StringCharacter
-	:	~["\\\r\n]
+	:~["\\\r\n]
 	;
 
 PRINT : 'print'
@@ -123,9 +121,6 @@ RETURN : 'return'
 ;
 
 ID : [a-zA-Z] [a-zA-Z0-9]*
-;
-
-TEXT : ID | '\t' | '\n'
 ;
 
 EQUALS : '='
@@ -155,5 +150,10 @@ LEFT_BRACKET : '('
 RIGHT_BRACKET : ')'
 ;
 
-WS : (' '|'\r'|'\n') -> skip
+WS
+: (' '|'\r'|'\n') -> skip
+;
+
+COMMENT
+:   ( '//' ~[\r\n]* '\r'? '\n' | '/*' .*? '*/') -> skip
 ;
