@@ -1,6 +1,7 @@
 package main;
 
 import main.ir_generator.IRGenerator;
+import main.ir_generator.IRTemplate;
 import org.antlr.v4.runtime.CommonTokenStream;
 import util.Util;
 
@@ -16,11 +17,14 @@ import static main.ir_generator.IRTemplate.*;
 
 public class Front {
     private static final String LL_FILE_NAME = "code.ll";
-    public static final String INT = "int";
-    public static final String FLOAT = "float";
+    private static final String INT = "int";
+    private static final String FLOAT = "float";
+    private static final String STRING = "String";
+
     private static int COUNTER = 1;
     private static Map<String, String> typesMemory = new HashMap<>();
     private static Map<String, Integer> addCounterMemory = new HashMap<>();
+    private static Map<String, String> strings = new HashMap<>();
 
 
     public static class Program {
@@ -84,7 +88,7 @@ public class Front {
 
 
     public static abstract class Statement {
-        public abstract String getIRCode();
+        public abstract String getIRCode(String functionName);
     }
 
     public static class StatementExpression extends Statement {
@@ -102,7 +106,7 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
             return expr.getIRCode();
         }
     }
@@ -119,7 +123,7 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
             int counterState = COUNTER;
             String ir = String.format(READ_INT, counterState, reference);
             COUNTER += 1;
@@ -142,7 +146,7 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
             int counterState = COUNTER;
             String ir = String.format(READ_FLOAT, counterState, reference);
             COUNTER += 1;
@@ -173,7 +177,7 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
             return String.format(RETURN_INT, Integer.parseInt(value));
         }
 
@@ -193,7 +197,7 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
             return String.format(RETURN_FLOAT, Float.parseFloat(value));
         }
 
@@ -213,11 +217,30 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
+            StringBuilder iR = new StringBuilder();
+
             int counterState = COUNTER;
-            String ir = String.format(PRINT_ID, counterState, id, COUNTER + 1, counterState);
+
+            switch (typesMemory.get(id)) {
+                case (INT): {
+                    iR.append(String.format(LOAD_INT_EXPRESSION, counterState, id));
+                    iR.append(String.format(PRINT_INT_ID, COUNTER + 1, counterState));
+
+                    break;
+                }
+                case (STRING): {
+                    String value = strings.get(id);
+                    iR.append(String.format(LOAD_STRING, counterState, value.length() + 1, value.length() + 1, id));
+                    iR.append(String.format(PRINT_STRING_ID, COUNTER + 1, counterState));
+                    break;
+                }
+            }
+
+
+
             COUNTER += 2;
-            return ir;
+            return iR.toString();
         }
 
         @Override
@@ -230,6 +253,41 @@ public class Front {
 
     static abstract class VariableDeclaration extends Statement {
         public abstract void addToMemory();
+    }
+
+    public static class StringVariableDeclaration extends VariableDeclaration {
+        private final String name;
+        private final String value;
+
+        public StringVariableDeclaration(String name, String value) {
+            this.name = name;
+            this.value = value.substring(1, value.length() - 1);
+            addToMemory();
+        }
+
+        @Override
+        public String getIRCode(String functionName) {
+            IRGenerator.generatedGlobalStatements.add(String.format(NEW_STRING_CONSTANT, functionName, name, value.length() + 1, value));
+
+            int counterState = COUNTER;
+            String ir = String.format(IRTemplate.STRING, counterState, name, value.length() + 1, counterState, counterState + 1, value.length() + 1, name, counterState + 1, value.length() + 1, value.length() + 1, functionName, name, value.length() + 1);
+            COUNTER += 2;
+            return ir;
+        }
+
+        @Override
+        public void addToMemory() {
+            typesMemory.put(name, STRING);
+            strings.put(name, value);
+        }
+
+        @Override
+        public String toString() {
+            return "StringVariableDeclaration{" +
+                    "name='" + name + '\'' +
+                    ", value='" + value + '\'' +
+                    '}';
+        }
     }
 
     static public class IntVariableDeclaration extends VariableDeclaration {
@@ -256,7 +314,7 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
             return String.format(LOCAL_VARIABLE_INT_DECLARATION, name).concat(String.format(LOCAL_VARIABLE_INT_ASSIGMENT, Integer.parseInt(value), name));
         }
     }
@@ -280,7 +338,7 @@ public class Front {
         }
 
         @Override
-        public String getIRCode() {
+        public String getIRCode(String functionName) {
             return String.format(LOCAL_VARIABLE_FLOAT_DECLARATION, name).concat(String.format(LOCAL_VARIABLE_FLOAT_ASSIGMENT, Float.parseFloat(value), name));
         }
 

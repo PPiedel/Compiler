@@ -1,13 +1,9 @@
 #include <stdio.h>
 
 int main() {
-   float zmienna = 1;
-
-   float innaZmienna = 2.0;
-
-   float trzeciaZmienna = 3;
-
-
-   zmienna = innaZmienna + trzeciaZmienna + zmienna;
-
+   int i=0;
+   char greeting[] = "Hello World";
+   printf("%s\n", greeting );
+   printf("%d\n",i);
+   return 0;
 }

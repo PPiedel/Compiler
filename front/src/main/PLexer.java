@@ -35,6 +35,11 @@ public class PLexer extends Lexer {
             "DOUBLE_QUOTE", "ADD", "MINUS", "MUTLIPLY", "DIVIDE", "LEFT_BRACKET",
             "RIGHT_BRACKET", "WS", "COMMENT"
     };
+    /**
+     * @deprecated Use {@link #VOCABULARY} instead.
+     */
+    @Deprecated
+    public static final String[] tokenNames;
     public static final String _serializedATN =
             "\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\2\35\u00dc\b\1\4\2" +
                     "\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4" +
@@ -108,27 +113,33 @@ public class PLexer extends Lexer {
             null, "';'", "'{'", "'}'", "','", null, null, "'int'", "'float'", "'String'",
             null, "'print'", "'readInt'", "'readFloat'", "'fun'", "'return'", null,
             "'='", "':'", "'\"'", "'+'", "'-'", "'*'", "'/'", "'('", "')'"
-	};
+    };
+    private static final String[] _SYMBOLIC_NAMES = {
+            null, null, null, null, null, "NUMBER", "NUMBER_FLOAT", "INT", "FLOAT",
+            "STRING", "STRING_LITERAL", "PRINT", "READ_INT", "READ_FLOAT", "FUN",
+            "RETURN", "ID", "EQUALS", "COLON", "DOUBLE_QUOTE", "ADD", "MINUS", "MUTLIPLY",
+            "DIVIDE", "LEFT_BRACKET", "RIGHT_BRACKET", "WS", "COMMENT"
+    };
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
-	/**
-	 * @deprecated Use {@link #VOCABULARY} instead.
-	 */
-	@Deprecated
-	public static final String[] tokenNames;
-	static {
-		tokenNames = new String[_SYMBOLIC_NAMES.length];
-		for (int i = 0; i < tokenNames.length; i++) {
-			tokenNames[i] = VOCABULARY.getLiteralName(i);
-			if (tokenNames[i] == null) {
-				tokenNames[i] = VOCABULARY.getSymbolicName(i);
-			}
+    static {
+        tokenNames = new String[_SYMBOLIC_NAMES.length];
+        for (int i = 0; i < tokenNames.length; i++) {
+            tokenNames[i] = VOCABULARY.getLiteralName(i);
+            if (tokenNames[i] == null) {
+                tokenNames[i] = VOCABULARY.getSymbolicName(i);
+            }
 
-			if (tokenNames[i] == null) {
-				tokenNames[i] = "<INVALID>";
-			}
-		}
-	}
+            if (tokenNames[i] == null) {
+                tokenNames[i] = "<INVALID>";
+            }
+        }
+    }
+
+    public PLexer(CharStream input) {
+        super(input);
+        _interp = new LexerATNSimulator(this, _ATN, _decisionToDFA, _sharedContextCache);
+    }
 
 	@Override
 	@Deprecated
@@ -140,12 +151,6 @@ public class PLexer extends Lexer {
 
 	public Vocabulary getVocabulary() {
 		return VOCABULARY;
-	}
-
-
-	public PLexer(CharStream input) {
-		super(input);
-		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
@@ -165,13 +170,6 @@ public class PLexer extends Lexer {
 
 	@Override
 	public ATN getATN() { return _ATN; }
-
-    private static final String[] _SYMBOLIC_NAMES = {
-            null, null, null, null, null, "NUMBER", "NUMBER_FLOAT", "INT", "FLOAT",
-            "STRING", "STRING_LITERAL", "PRINT", "READ_INT", "READ_FLOAT", "FUN",
-            "RETURN", "ID", "EQUALS", "COLON", "DOUBLE_QUOTE", "ADD", "MINUS", "MUTLIPLY",
-            "DIVIDE", "LEFT_BRACKET", "RIGHT_BRACKET", "WS", "COMMENT"
-    };
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

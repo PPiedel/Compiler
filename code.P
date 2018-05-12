@@ -1,25 +1,6 @@
-
 fun main() : int {
-    //this is comment
-
-    int x = 0;
-
-    int readed = 0;
-    readInt(readed);
-    print(readed);
-
-    int readed2 = 0;
-    readInt(readed2);
-    print(readed2);
-
-    /*This is two
-    line comment
-    */
-
-    x = readed2 * readed;
-
-    print(x);
-
+    String greeting = "Hello World";
+    print(greeting);
     return 0;
 }
 
