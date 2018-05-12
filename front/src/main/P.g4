@@ -52,7 +52,8 @@ assignment returns [Front.Assignment val] :
 
 variable_declaration returns [Front.VariableDeclaration val] :
     INT name = ID EQUALS  value = NUMBER { $val = new Front.IntVariableDeclaration($name.text,$value.text); } |
-    FLOAT name = ID EQUALS value = NUMBER_FLOAT { $val = new Front.FloatVariableDeclaration($name.text,$value.text); }
+    FLOAT name = ID EQUALS value = NUMBER_FLOAT { $val = new Front.FloatVariableDeclaration($name.text,$value.text); } |
+    STRING name = ID  EQUALS STRING_LITERAL { $val = new Front.StringVariableDeclaration($name.text,$STRING_LITERAL.text); }
 ;
 
 print returns [Front.PrintStatement val] :
@@ -89,6 +90,23 @@ INT : 'int'
 FLOAT : 'float'
 ;
 
+STRING : 'String'
+;
+
+STRING_LITERAL
+	:	'"' StringCharacters? '"'
+	;
+
+fragment
+StringCharacters
+	:	StringCharacter+
+	;
+
+fragment
+StringCharacter
+	:	~["\\\r\n]
+	;
+
 PRINT : 'print'
 ;
 
@@ -107,10 +125,16 @@ RETURN : 'return'
 ID : [a-zA-Z] [a-zA-Z0-9]*
 ;
 
+TEXT : ID | '\t' | '\n'
+;
+
 EQUALS : '='
 ;
 
 COLON : ':'
+;
+
+DOUBLE_QUOTE : '"'
 ;
 
 ADD : '+'
