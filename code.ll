@@ -35,6 +35,19 @@ define i32 @main() #0 {
 	ret i32 0
 }
 
+
+define i32 @second() #0 {
+
+	ret i32 0
+}
+
+
+define i32 @third() #0 {
+
+	ret i32 0
+}
+
+
 declare i32 @printf(i8*, ...) #1
 
 declare i32 @__isoc99_scanf(i8*, ...) #1

@@ -17,17 +17,11 @@ public final class IRGenerator {
         this.functions = program.getFunctions();
     }
 
-    public String generateIR() {
+    public static String endFile() {
         StringBuilder ir = new StringBuilder();
-
-        beginFile(ir);
-
-        processGlobalStatements(ir);
-
-        processFunctions(ir);
-
-        endFile(ir);
-
+        ir.append(PRINTF_DECLARATION);
+        ir.append(READ_DECLARATION);
+        ir.append(END);
         return ir.toString();
     }
 
@@ -51,16 +45,26 @@ public final class IRGenerator {
         }
     }
 
-    private void endFile(StringBuilder ir) {
-        ir.append(PRINTF_DECLARATION);
-        ir.append(READ_DECLARATION);
-        ir.append(END);
-    }
-
-    private void beginFile(StringBuilder ir) {
+    public static String beginFile() {
+        StringBuilder ir = new StringBuilder();
         ir.append(BEGIN).append(NEW_LINE);
         ir.append(PRINT_STR_CONSTATNT);
         ir.append(READ_STRING_CONST);
+        return ir.toString();
+    }
+
+    public String generateIR() {
+        StringBuilder ir = new StringBuilder();
+
+        //beginFile(ir);
+
+        processGlobalStatements(ir);
+
+        processFunctions(ir);
+
+        //endFile(ir);
+
+        return ir.toString();
     }
 
     private void appendFunctionEnd(StringBuilder ir) {

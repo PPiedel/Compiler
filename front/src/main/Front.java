@@ -2,8 +2,6 @@ package main;
 
 import main.ir_generator.IRGenerator;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import util.Util;
 
 import java.io.File;
@@ -590,8 +588,12 @@ public class Front {
         }
     }
 
-    public static void run(String filePath) throws IOException {
-        PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(filePath)));
+    public static void run(String firstFile, String... anotherFiles) throws IOException {
+        StringBuilder iR = new StringBuilder();
+
+        iR.append(IRGenerator.beginFile());
+
+        PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(firstFile)));
         lexer.removeErrorListeners();
         lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
 
@@ -616,15 +618,45 @@ public class Front {
             System.out.println(fun.toString());
         }
 
-        generateLL(program.val);
+        iR.append(generateLL(program.val)).append(NEW_LINE);
 
+        for (String anotherFile : anotherFiles) {
+            lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(anotherFile)));
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+            tokens = new CommonTokenStream(lexer);
+
+            parser = new PParser(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+
+            program = parser.program();
+
+            statements = program.val.statements;
+            System.out.println("Program statements : ");
+            for (Statement statement : statements) {
+                System.out.println(statement);
+            }
+
+            functions = program.val.functions;
+            System.out.println("Program functions : ");
+            for (Function fun : functions) {
+                System.out.println(fun.toString());
+            }
+
+            iR.append(generateLL(program.val)).append(NEW_LINE);
+        }
+
+        iR.append(IRGenerator.endFile());
+
+        Util.writeIRToFile(iR.toString(), new File(LL_FILE_NAME));
 
     }
 
-    private static void generateLL(Program program) {
+    private static String generateLL(Program program) {
         IRGenerator irGenerator = new IRGenerator(program);
-        String intermediateRepresentation = irGenerator.generateIR();
-
-        Util.writeIRToFile(intermediateRepresentation, new File(LL_FILE_NAME));
+        return irGenerator.generateIR();
     }
 }
