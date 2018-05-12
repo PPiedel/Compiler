@@ -1,0 +1,6 @@
+
+
+fun second() : int {
+    //function for files linking purposes
+    return 0;
+}
