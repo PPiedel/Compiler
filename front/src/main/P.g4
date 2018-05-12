@@ -35,13 +35,16 @@ statement returns [Front.Statement val] :
 
 
 expression returns [Front.Expression val] :
-    a = NUMBER { $val = new Front.IntExpression($a.text); } |
-    d = assignment { $val = $d.val; }
+    a = NUMBER { $val = new Front.NumberExpression($a.text); } |
+    b = ID { $val = new Front.IdExpression($b.text); } |
+    c = assignment { $val = $c.val; } |
+    d = expression ADD e = expression { $val = new Front.AddExpression($d.val,$e.val); }
+
 ;
 
 
 assignment returns [Front.Assignment val] :
-    to = ID '=' what = expression { $val = new Front.Assignment($to.text, $what.val); }
+    to = ID '=' what = expression { $val = new Front.Assignment($to.text, $what.val); } |
 ;
 
 variable_declaration returns [Front.VariableDeclaration val] :
@@ -62,6 +65,7 @@ read returns [Front.Read val] :
     READ_INT LEFT_BRACKET reference = ID RIGHT_BRACKET {$val = new Front.ReadInt($reference.text);} |
     READ_FLOAT LEFT_BRACKET reference = ID RIGHT_BRACKET {$val = new Front.ReadFloat($reference.text);} |
 ;
+
 
 COMMENT
     :   ( '//' ~[\r\n]* '\r'? '\n' | '/*' .*? '*/') -> skip
@@ -104,6 +108,18 @@ EQUALS : '='
 ;
 
 COLON : ':'
+;
+
+ADD : '+'
+;
+
+MINUS : '-'
+;
+
+MUTLIPLY : '*'
+;
+
+DIVIDE : '/'
 ;
 
 LEFT_BRACKET : '('

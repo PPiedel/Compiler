@@ -1,6 +1,11 @@
 fun main() : int {
-    int testInteger = 0;
-    readInt(testInteger);
-    print(testInteger);
+    int zmienna = 1;
+    int innaZmienna = 2;
+    int trzeciaZmienna = 3;
+
+    zmienna = innaZmienna + trzeciaZmienna;
+
+    print(zmienna);
+
     return 0;
 }

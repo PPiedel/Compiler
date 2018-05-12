@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static main.ir_generator.IRTemplate.*;
 
@@ -19,6 +21,8 @@ public class Front {
     public static final String INT = "int";
     public static final String FLOAT = "float";
     private static int COUNTER = 1;
+    private static Map<String, String> typesMemory = new HashMap<>();
+    private static Map<String, Integer> addCounterMemory = new HashMap<>();
 
 
     public static class Program {
@@ -101,7 +105,7 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return "";
+            return expr.getIRCode();
         }
     }
 
@@ -227,6 +231,7 @@ public class Front {
     }
 
     static abstract class VariableDeclaration extends Statement {
+        public abstract void addToMemory();
     }
 
     static public class IntVariableDeclaration extends VariableDeclaration {
@@ -236,10 +241,12 @@ public class Front {
         public IntVariableDeclaration(String name, String value) {
             this.name = name;
             this.value = value;
+            addToMemory();
         }
 
-        public String getName() {
-            return name;
+        @Override
+        public void addToMemory() {
+            typesMemory.put(name, INT);
         }
 
         @Override
@@ -263,6 +270,7 @@ public class Front {
         public FloatVariableDeclaration(String name, String value) {
             this.name = name;
             this.value = value;
+            addToMemory();
         }
 
         @Override
@@ -277,28 +285,66 @@ public class Front {
         public String getIRCode() {
             return String.format(LOCAL_VARIABLE_FLOAT_DECLARATION, name).concat(String.format(LOCAL_VARIABLE_FLOAT_ASSIGMENT, Float.parseFloat(value), name));
         }
+
+        @Override
+        public void addToMemory() {
+            typesMemory.put(name, FLOAT);
+        }
     }
+
 
     static abstract class Expression {
         public abstract String getIRCode();
     }
 
-    static public class IntExpression extends Expression {
-        private final String m_data;
+    static public class IdExpression extends Expression {
+        private final String id;
 
-        public IntExpression(String data) {
-            m_data = data;
+        public IdExpression(String id) {
+            this.id = id;
         }
 
-        public String getData() {
-            return m_data;
+        @Override
+        public String getIRCode() {
+            int counterState = COUNTER;
+            StringBuilder iR = new StringBuilder();
+            addCounterMemory.put(id, counterState);
+            switch (typesMemory.get(id)) {
+                case (INT): {
+                    iR.append(String.format(LOAD_INT_EXPRESSION, counterState, id));
+                    break;
+                }
+                case (FLOAT): {
+                    iR.append(String.format(LOAD_FLOAT_EXPRESSION, counterState, id));
+                    break;
+                }
+
+            }
+            COUNTER++;
+            return iR.toString();
         }
 
         @Override
         public String toString() {
-            return "IntExpression{" +
-                    "m_data='" + m_data + '\'' +
-                    '}';
+            return id;
+        }
+
+    }
+
+    static public class NumberExpression extends Expression {
+        private final String number;
+
+        public NumberExpression(String data) {
+            number = data;
+        }
+
+        public String getData() {
+            return number;
+        }
+
+        @Override
+        public String toString() {
+            return number;
         }
 
         @Override
@@ -327,9 +373,66 @@ public class Front {
 
         @Override
         public String getIRCode() {
-            return null;
+            StringBuilder iR = new StringBuilder();
+            iR.append(mWhat.getIRCode());
+
+            switch (typesMemory.get(to)) {
+                case (INT):
+                    iR.append(String.format(STORE_INT,COUNTER,to));
+                    break;
+                case (FLOAT): {
+                    iR.append(String.format(STORE_FLOAT,COUNTER,to));
+                    break;
+                }
+            }
+            COUNTER++;
+            return iR.toString();
         }
     }
+
+    public static class AddExpression extends Expression {
+        private final Expression left;
+        private final Expression right;
+
+        public AddExpression(Expression left, Expression right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String getIRCode() {
+            StringBuilder iR = new StringBuilder();
+
+            String leftIRCode = left.getIRCode();
+            iR.append(leftIRCode);
+
+            String rightIRCode = right.getIRCode();
+            iR.append(rightIRCode);
+
+            int counterState = COUNTER;
+            switch (typesMemory.get(left.toString())) {
+                case (INT): {
+                    iR.append(String.format(ADD_INT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+                case (FLOAT): {
+                    iR.append(String.format(ADD_FLOAT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+            }
+
+            return iR.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "AddExpression{" +
+                    "left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
+    }
+
 
     static public class Body {
         private List<Statement> statements = new ArrayList<Statement>();
