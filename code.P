@@ -1,6 +1,34 @@
 fun main() : int {
-    String greeting = "Hello World";
+    //comment
+
+    String greeting = "Dzien dobry tu program";
     print(greeting);
+
+    /*Two line
+    comment   */
+
+    int i = 5;
+    int j = 10;
+    int wynik = 0;
+    wynik = i*j;
+    String text = "Wynik mnozenia piec i dziesiec to : ";
+    print(text);
+    print(wynik);
+
+    String text2 = "Wpisz swoja liczbe do pomnozenia przez 10";
+    print(text2);
+    int liczba = 0;
+    readInt(liczba);
+
+    int r = 0;
+    r = j*liczba;
+    String text3 = "Wynik Twojego mnozenia to : ";
+    print(text3);
+    print(r);
+
+     /*Two line
+        comment   */
+
     return 0;
 }
 
