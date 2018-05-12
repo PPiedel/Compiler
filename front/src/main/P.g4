@@ -42,8 +42,12 @@ expression returns [Front.Expression val] :
     f = expression MINUS g = expression { $val = new Front.MinusExpression($f.val,$g.val); } |
     h = expression MUTLIPLY i = expression { $val = new Front.MultiplyExpression($h.val,$i.val); } |
     j = expression DIVIDE k = expression { $val = new Front.DivideExpression($j.val,$k.val); } |
-
+    l = indexingExpression { $val = $l.val; }
 ;
+
+indexingExpression returns [Front.IndexingExpression val]
+    : name = ID LEFT_SQUARE_BRACKET index = NUMBER RIGHT_SQUARE_BRACKET EQUALS value = NUMBER { $val = new Front.IndexingExpression($name.text,$index.text,$value.text); }
+    ;
 
 
 assignment returns [Front.Assignment val] :
@@ -63,7 +67,8 @@ array returns [Front.Array val] :
 ;
 
 print returns [Front.PrintStatement val] :
-    PRINT LEFT_BRACKET reference = ID RIGHT_BRACKET {$val = new Front.PrintIDStatement($reference.text);}
+    PRINT LEFT_BRACKET reference = ID RIGHT_BRACKET {$val = new Front.PrintIDStatement($reference.text);} |
+    PRINT LEFT_BRACKET reference = ID LEFT_SQUARE_BRACKET index = NUMBER RIGHT_SQUARE_BRACKET RIGHT_BRACKET {$val = new Front.PrintIndex($reference.text,$index.text);}
 ;
 
 returnst returns [Front.ReturnStatement val] :

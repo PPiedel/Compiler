@@ -20,12 +20,14 @@ public class Front {
     private static final String INT = "int";
     private static final String FLOAT = "float";
     private static final String STRING = "String";
-    private static String INT_ARRAY = "INT_ARRAY";
+    private static final String INT_ARRAY = "INT_ARRAY";
+    private static final String FLOAT_ARRAY = "FLOAT_ARRAY";
 
     private static int COUNTER = 1;
     private static Map<String, String> typesMemory = new HashMap<>();
     private static Map<String, Integer> addCounterMemory = new HashMap<>();
     private static Map<String, String> strings = new HashMap<>();
+    private static Map<String, Array> arrays = new HashMap<>();
 
 
     public static class Program {
@@ -210,6 +212,41 @@ public class Front {
         }
     }
 
+    public static class PrintIndex extends PrintStatement {
+        private final String id;
+        private final String index;
+
+        public PrintIndex(String id, String index) {
+            this.id = id;
+            this.index = index;
+        }
+
+        @Override
+        public String getIRCode(String functionName) {
+            Array array = arrays.get(id);
+            int size = Integer.parseInt(array.getSize());
+            int index = Integer.parseInt(this.index);
+            StringBuilder iR = new StringBuilder();
+            int counterState = COUNTER;
+            switch (typesMemory.get(id)) {
+                case (INT_ARRAY): {
+                    iR.append(String.format(PRINT_INT_INDEX, counterState, size, size, id, index, counterState + 1, counterState, counterState + 2, counterState + 1));
+                    break;
+                }
+            }
+
+            return iR.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "PrintIndex{" +
+                    "id='" + id + '\'' +
+                    ", index='" + index + '\'' +
+                    '}';
+        }
+    }
+
     static class PrintIDStatement extends PrintStatement {
         private final String id;
 
@@ -257,17 +294,28 @@ public class Front {
     }
 
     public static abstract class Array extends VariableDeclaration {
+        protected final String name;
+        protected final String size;
 
-    }
-
-    public static class ArrayInt extends Array {
-        private final String name;
-        private final String size;
-
-        public ArrayInt(String name, String size) {
+        public Array(String name, String size) {
             this.name = name;
             this.size = size;
             addToMemory();
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getSize() {
+            return size;
+        }
+    }
+
+    public static class ArrayInt extends Array {
+
+        public ArrayInt(String name, String size) {
+            super(name, size);
         }
 
         @Override
@@ -281,6 +329,7 @@ public class Front {
         @Override
         public void addToMemory() {
             typesMemory.put(name, INT_ARRAY);
+            arrays.put(name, this);
         }
 
         @Override
@@ -293,13 +342,9 @@ public class Front {
     }
 
     public static class ArrayFloat extends Array {
-        private final String name;
-        private final String size;
 
         public ArrayFloat(String name, String size) {
-            this.name = name;
-            this.size = size;
-            addToMemory();
+            super(name, size);
         }
 
         @Override
@@ -312,7 +357,8 @@ public class Front {
 
         @Override
         public void addToMemory() {
-            typesMemory.put(name, INT_ARRAY);
+            typesMemory.put(name, FLOAT_ARRAY);
+            arrays.put(name, this);
         }
 
         @Override
@@ -323,6 +369,52 @@ public class Front {
                     '}';
         }
     }
+
+
+    public static class IndexingExpression extends Expression {
+        private final String to;
+        private final String index;
+        private final String value;
+
+        public IndexingExpression(String to, String index, String value) {
+            this.to = to;
+            this.index = index;
+            this.value = value;
+        }
+
+        @Override
+        public String getIRCode() {
+            StringBuilder iR = new StringBuilder();
+
+            Array array = arrays.get(to);
+            int counterState = COUNTER;
+            switch (typesMemory.get(to)) {
+                case (INT_ARRAY): {
+                    int size = Integer.parseInt(array.getSize());
+                    iR.append(String.format(IRTemplate.INT_ARRAY_INDEX_ASSIGN, counterState, size, size, to, Integer.parseInt(index), Integer.parseInt(value), counterState));
+                    break;
+                }
+                case (FLOAT_ARRAY): {
+                    int size = Integer.parseInt(array.getSize());
+                    iR.append(String.format(IRTemplate.FLOAT_ARRAY_INDEX_ASSIGN, counterState, size, size, to, Integer.parseInt(index), Float.parseFloat(value), counterState));
+                    break;
+                }
+            }
+            COUNTER++;
+
+            return iR.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "IndexingExpression{" +
+                    "to='" + to + '\'' +
+                    ", index='" + index + '\'' +
+                    ", value='" + value + '\'' +
+                    '}';
+        }
+    }
+
 
     public static class StringVariableDeclaration extends VariableDeclaration {
         private final String name;

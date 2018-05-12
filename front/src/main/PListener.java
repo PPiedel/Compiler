@@ -58,10 +58,24 @@ public interface PListener extends ParseTreeListener {
 	 */
 	void exitExpression(PParser.ExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PParser#assignment}.
-	 * @param ctx the parse tree
-	 */
-	void enterAssignment(PParser.AssignmentContext ctx);
+     * Enter a parse tree produced by {@link PParser#indexingExpression}.
+     * @param ctx the parse tree
+     */
+    void enterIndexingExpression(PParser.IndexingExpressionContext ctx);
+
+    /**
+     * Exit a parse tree produced by {@link PParser#indexingExpression}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitIndexingExpression(PParser.IndexingExpressionContext ctx);
+
+    /**
+     * Enter a parse tree produced by {@link PParser#assignment}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterAssignment(PParser.AssignmentContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link PParser#assignment}.
 	 * @param ctx the parse tree
@@ -77,8 +91,10 @@ public interface PListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVariable_declaration(PParser.Variable_declarationContext ctx);
-	/**
+
+    /**
      * Enter a parse tree produced by {@link PParser#array}.
+     *
      * @param ctx the parse tree
      */
     void enterArray(PParser.ArrayContext ctx);

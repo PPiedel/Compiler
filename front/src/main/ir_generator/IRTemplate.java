@@ -33,6 +33,11 @@ public class IRTemplate {
             "\n@.str.1 = private unnamed_addr constant [4 x i8] c\"%d\\0A\\00\", align 1\n";
     public static final String PRINT_INT_ID = "\n\t%%%d = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %%%d)\n";
     public static final String PRINT_STRING_ID = "\n\t%%%d = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i8* %%%d\n)";
+    public static final String PRINT_INT_INDEX =
+            "\n\t%%%d = getelementptr inbounds [%d x i32], [%d x i32]* %%%s, i64 0, i64 %d" +
+                    "\n\t%%%d = load i32, i32* %%%d, align 4" +
+                    "\n\t%%%d = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %%%d)\n";
+
 
     //add, minus, multiply, divide
     public static final String LOAD_INT_EXPRESSION = "\n\t%%%d = load i32, i32* %%%s, align 4";
@@ -53,6 +58,12 @@ public class IRTemplate {
     public static final String ARRAY_DECLARATION = "\n\t%%%d = alloca i32, align 4" +
             "\n\tstore i32 0, i32* %%%d, align 4" +
             "\n\t%%%s = alloca [%d x %s], align 16\n";
+
+    public static final String INT_ARRAY_INDEX_ASSIGN = "\n\t%%%d = getelementptr inbounds [%d x i32], [%d x i32]* %%%s, i64 0, i64 %d" +
+            "\n\tstore i32 %d, i32* %%%d, align 4\n";
+
+    public static final String FLOAT_ARRAY_INDEX_ASSIGN = "\n\t%%%d = getelementptr inbounds [%d x float], [%d x float]* %%%s, i64 0, i64 %d" +
+            "\n\tstore float %f, i32* %%%d, align 4";
 
 
     //string

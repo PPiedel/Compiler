@@ -5,11 +5,14 @@ define i32 @main() #0 {
 
 	%1 = alloca i32, align 4
 	store i32 0, i32* %1, align 4
-	%ints = alloca [10 x i32], align 16
+	%array = alloca [10 x i32], align 16
 
-	%2 = alloca i32, align 4
-	store i32 0, i32* %2, align 4
-	%floats = alloca [5 x float], align 16
+	%2 = getelementptr inbounds [10 x i32], [10 x i32]* %array, i64 0, i64 5
+	store i32 8, i32* %2, align 4
+
+	%3 = getelementptr inbounds [10 x i32], [10 x i32]* %array, i64 0, i64 5
+	%4 = load i32, i32* %3, align 4
+	%5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %4)
 
 	ret i32 0
 }

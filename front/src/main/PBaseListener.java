@@ -76,7 +76,27 @@ public class PBaseListener implements PListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignment(PParser.AssignmentContext ctx) { }
+    @Override
+    public void enterIndexingExpression(PParser.IndexingExpressionContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void exitIndexingExpression(PParser.IndexingExpressionContext ctx) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>The default implementation does nothing.</p>
+     */
+    @Override
+    public void enterAssignment(PParser.AssignmentContext ctx) {
+    }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -99,7 +119,7 @@ public class PBaseListener implements PListener {
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-	 */
+     */
     @Override
     public void enterArray(PParser.ArrayContext ctx) {
     }

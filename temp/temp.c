@@ -1,6 +1,10 @@
 #include <stdio.h>
 
 int main() {
-   float n[10];
+   int array[10];
+   array[5] = 8;
+
+   printf("%d\n",array[5]);
+
    return 0;
 }
