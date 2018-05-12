@@ -1,11 +1,25 @@
+
 fun main() : int {
-    int zmienna = 1;
-    int innaZmienna = 2;
-    int trzeciaZmienna = 3;
+    //this is comment
 
-    zmienna = innaZmienna + trzeciaZmienna;
+    int x = 0
 
-    print(zmienna);
+    int readed = 0;
+    readInt(readed);
+    print(readed);
+
+    int readed2 = 0;
+    readInt(readed2);
+    print(readed2);
+
+    /*This is two
+    line comment
+    */
+
+    x = readed2 * readed;
+
+    print(x);
 
     return 0;
 }
+

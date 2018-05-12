@@ -433,6 +433,136 @@ public class Front {
         }
     }
 
+    public static class MinusExpression extends Expression {
+        private final Expression left;
+        private final Expression right;
+
+        public MinusExpression(Expression left, Expression right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String getIRCode() {
+            StringBuilder iR = new StringBuilder();
+
+            String leftIRCode = left.getIRCode();
+            iR.append(leftIRCode);
+
+            String rightIRCode = right.getIRCode();
+            iR.append(rightIRCode);
+
+            int counterState = COUNTER;
+            switch (typesMemory.get(left.toString())) {
+                case (INT): {
+                    iR.append(String.format(MINUS_INT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+                case (FLOAT): {
+                    iR.append(String.format(MINUS_FLOAT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+            }
+
+            return iR.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "MinusExpression{" +
+                    "left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
+    }
+
+    public static class MultiplyExpression extends Expression {
+        private final Expression left;
+        private final Expression right;
+
+        public MultiplyExpression(Expression left, Expression right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String getIRCode() {
+            StringBuilder iR = new StringBuilder();
+
+            String leftIRCode = left.getIRCode();
+            iR.append(leftIRCode);
+
+            String rightIRCode = right.getIRCode();
+            iR.append(rightIRCode);
+
+            int counterState = COUNTER;
+            switch (typesMemory.get(left.toString())) {
+                case (INT): {
+                    iR.append(String.format(MULTIPLY_INT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+                case (FLOAT): {
+                    iR.append(String.format(MULTIPLY_FLOAT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+            }
+
+            return iR.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "MultiplyExpression{" +
+                    "left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
+    }
+
+    public static class DivideExpression extends Expression {
+        private final Expression left;
+        private final Expression right;
+
+        public DivideExpression(Expression left, Expression right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public String getIRCode() {
+            StringBuilder iR = new StringBuilder();
+
+            String leftIRCode = left.getIRCode();
+            iR.append(leftIRCode);
+
+            String rightIRCode = right.getIRCode();
+            iR.append(rightIRCode);
+
+            int counterState = COUNTER;
+            switch (typesMemory.get(left.toString())) {
+                case (INT): {
+                    iR.append(String.format(DIVIDE_INT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+                case (FLOAT): {
+                    iR.append(String.format(DIVIDE_FLOAT, counterState, addCounterMemory.get(left.toString()), addCounterMemory.get(right.toString())));
+                    break;
+                }
+            }
+
+            return iR.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "DivideExpression{" +
+                    "left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
+    }
+
+
 
     static public class Body {
         private List<Statement> statements = new ArrayList<Statement>();
@@ -469,23 +599,25 @@ public class Front {
 
         ParseTree tree = parser.program();
         ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(new PBaseListener(), tree);
+        MyListenter myListenter = new MyListenter();
+        walker.walk(myListenter, tree);
 
+        if (!myListenter.isError()){
+            PParser.ProgramContext program = (PParser.ProgramContext) tree;
+            List<Statement> statements = program.val.statements;
+            System.out.println("Program statements : ");
+            for (Statement statement : statements) {
+                System.out.println(statement);
+            }
 
-        PParser.ProgramContext program = (PParser.ProgramContext) tree;
-        List<Statement> statements = program.val.statements;
-        System.out.println("Program statements : ");
-        for (Statement statement : statements) {
-            System.out.println(statement);
+            List<Function> functions = program.val.functions;
+            System.out.println("Program functions : ");
+            for (Function fun : functions) {
+                System.out.println(fun.toString());
+            }
+
+            generateLL(program.val);
         }
-
-        List<Function> functions = program.val.functions;
-        System.out.println("Program functions : ");
-        for (Function fun : functions) {
-            System.out.println(fun.toString());
-        }
-
-        generateLL(program.val);
 
     }
 

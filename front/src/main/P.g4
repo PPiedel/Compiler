@@ -38,7 +38,10 @@ expression returns [Front.Expression val] :
     a = NUMBER { $val = new Front.NumberExpression($a.text); } |
     b = ID { $val = new Front.IdExpression($b.text); } |
     c = assignment { $val = $c.val; } |
-    d = expression ADD e = expression { $val = new Front.AddExpression($d.val,$e.val); }
+    d = expression ADD e = expression { $val = new Front.AddExpression($d.val,$e.val); } |
+    f = expression MINUS g = expression { $val = new Front.MinusExpression($f.val,$g.val); } |
+    h = expression MUTLIPLY i = expression { $val = new Front.MultiplyExpression($h.val,$i.val); } |
+    j = expression DIVIDE k = expression { $val = new Front.DivideExpression($j.val,$k.val); } |
 
 ;
 
