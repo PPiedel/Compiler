@@ -156,6 +156,12 @@ public class PLexer extends Lexer {
         return tokenNames;
     }
 
+    @Override
+
+    public Vocabulary getVocabulary() {
+        return VOCABULARY;
+    }
+
 	@Override
 	public String getGrammarFileName() { return "P.g4"; }
 
@@ -169,12 +175,8 @@ public class PLexer extends Lexer {
 	public String[] getChannelNames() { return channelNames; }
 
 	@Override
-	public String[] getModeNames() { return modeNames; }
-
-    @Override
-
-    public Vocabulary getVocabulary() {
-        return VOCABULARY;
+    public String[] getModeNames() {
+        return modeNames;
     }
 
     @Override

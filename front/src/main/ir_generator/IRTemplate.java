@@ -52,7 +52,7 @@ public class IRTemplate {
     //array
     public static final String ARRAY_DECLARATION = "\n\t%%%d = alloca i32, align 4" +
             "\n\tstore i32 0, i32* %%%d, align 4" +
-            "\n\t%%%s = alloca [%d x %s], align 16";
+            "\n\t%%%s = alloca [%d x %s], align 16\n";
 
 
     //string

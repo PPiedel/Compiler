@@ -267,6 +267,7 @@ public class Front {
         public ArrayInt(String name, String size) {
             this.name = name;
             this.size = size;
+            addToMemory();
         }
 
         @Override
@@ -285,6 +286,38 @@ public class Front {
         @Override
         public String toString() {
             return "ArrayInt{" +
+                    "name='" + name + '\'' +
+                    ", size='" + size + '\'' +
+                    '}';
+        }
+    }
+
+    public static class ArrayFloat extends Array {
+        private final String name;
+        private final String size;
+
+        public ArrayFloat(String name, String size) {
+            this.name = name;
+            this.size = size;
+            addToMemory();
+        }
+
+        @Override
+        public String getIRCode(String functionName) {
+            int counterState = COUNTER;
+            String iR = String.format(ARRAY_DECLARATION, counterState, counterState, name, Integer.parseInt(size), IRTemplate.FLOAT);
+            COUNTER++;
+            return iR;
+        }
+
+        @Override
+        public void addToMemory() {
+            typesMemory.put(name, INT_ARRAY);
+        }
+
+        @Override
+        public String toString() {
+            return "ArrayFloat{" +
                     "name='" + name + '\'' +
                     ", size='" + size + '\'' +
                     '}';

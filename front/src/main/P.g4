@@ -58,7 +58,8 @@ variable_declaration returns [Front.VariableDeclaration val] :
 ;
 
 array returns [Front.Array val] :
-    INT LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET name = ID EQUALS NEW INT LEFT_SQUARE_BRACKET size = NUMBER  RIGHT_SQUARE_BRACKET {$val = new Front.ArrayInt($name.text, $size.text);}
+    INT LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET name = ID EQUALS NEW INT LEFT_SQUARE_BRACKET size = NUMBER  RIGHT_SQUARE_BRACKET {$val = new Front.ArrayInt($name.text, $size.text);} |
+    FLOAT LEFT_SQUARE_BRACKET RIGHT_SQUARE_BRACKET name = ID EQUALS NEW FLOAT LEFT_SQUARE_BRACKET size = NUMBER  RIGHT_SQUARE_BRACKET {$val = new Front.ArrayFloat($name.text, $size.text);}
 ;
 
 print returns [Front.PrintStatement val] :

@@ -1,5 +1,6 @@
 fun main() : int {
-    int[] array = new int[10];
+    int[] ints = new int[10];
+    float[] floats = new float[5];
     return 0;
 }
 
