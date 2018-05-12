@@ -378,10 +378,10 @@ public class Front {
 
             switch (typesMemory.get(to)) {
                 case (INT):
-                    iR.append(String.format(STORE_INT,COUNTER,to));
+                    iR.append(String.format(STORE_INT, COUNTER, to));
                     break;
                 case (FLOAT): {
-                    iR.append(String.format(STORE_FLOAT,COUNTER,to));
+                    iR.append(String.format(STORE_FLOAT, COUNTER, to));
                     break;
                 }
             }
@@ -563,7 +563,6 @@ public class Front {
     }
 
 
-
     static public class Body {
         private List<Statement> statements = new ArrayList<Statement>();
 
@@ -593,31 +592,32 @@ public class Front {
 
     public static void run(String filePath) throws IOException {
         PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(filePath)));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
         CommonTokenStream tokens = new CommonTokenStream(lexer);
+
         PParser parser = new PParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
 
-        ParseTree tree = parser.program();
-        ParseTreeWalker walker = new ParseTreeWalker();
-        MyListenter myListenter = new MyListenter();
-        walker.walk(myListenter, tree);
+        PParser.ProgramContext program = parser.program();
 
-        if (!myListenter.isError()){
-            PParser.ProgramContext program = (PParser.ProgramContext) tree;
-            List<Statement> statements = program.val.statements;
-            System.out.println("Program statements : ");
-            for (Statement statement : statements) {
-                System.out.println(statement);
-            }
-
-            List<Function> functions = program.val.functions;
-            System.out.println("Program functions : ");
-            for (Function fun : functions) {
-                System.out.println(fun.toString());
-            }
-
-            generateLL(program.val);
+        List<Statement> statements = program.val.statements;
+        System.out.println("Program statements : ");
+        for (Statement statement : statements) {
+            System.out.println(statement);
         }
+
+        List<Function> functions = program.val.functions;
+        System.out.println("Program functions : ");
+        for (Function fun : functions) {
+            System.out.println(fun.toString());
+        }
+
+        generateLL(program.val);
+
 
     }
 
