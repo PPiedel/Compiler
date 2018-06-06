@@ -58,7 +58,8 @@ variable_declaration returns [Front.VariableDeclaration val] :
     INT name = ID EQUALS  value = NUMBER { $val = new Front.IntVariableDeclaration($name.text,$value.text); } |
     FLOAT name = ID EQUALS value = NUMBER_FLOAT { $val = new Front.FloatVariableDeclaration($name.text,$value.text); } |
     STRING name = ID  EQUALS value = STRING_LITERAL { $val = new Front.StringVariableDeclaration($name.text,$value.text); } |
-    f = array {{ $val = $f.val; } }
+    f = array {{ $val = $f.val; } } |
+    STATIC INT name = ID EQUALS  value = NUMBER { $val = new Front.StaticIntVariableDeclaration($name.text,$value.text); }
 ;
 
 array returns [Front.Array val] :
@@ -97,6 +98,9 @@ INT : 'int'
 ;
 
 FLOAT : 'float'
+;
+
+STATIC : 'static'
 ;
 
 STRING : 'String'

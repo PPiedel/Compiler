@@ -17,6 +17,10 @@ public class IRTemplate {
     public static final String LOCAL_VARIABLE_FLOAT_ASSIGMENT = "\tstore float %f, float* %%%s, align 4\n";
     public static final String GLOBAL_FLOAT = "@%s = global float %f, align 4";
 
+    //static
+    public static final String STATIC_INT = "\n@%s.%s = internal global i32 %d, align 4";
+    public static final String STATIC_FLOAT = "@%s.%s = internal global float %f, align 4";
+
     //return
     public static final String RETURN_INT = "\n\tret i32 %d";
     public static final String RETURN_FLOAT = "\n\tret float %f";
@@ -37,10 +41,14 @@ public class IRTemplate {
             "\n\t%%%d = getelementptr inbounds [%d x i32], [%d x i32]* %%%s, i64 0, i64 %d" +
                     "\n\t%%%d = load i32, i32* %%%d, align 4" +
                     "\n\t%%%d = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.1, i32 0, i32 0), i32 %%%d)\n";
+    public static final String PRINT_FLOAT =
+            "\n\t%%%d = fpext float %%%d to double" +
+                    "\n\t%%%d = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.2, i32 0, i32 0), double %%%d)\n";
 
 
     //add, minus, multiply, divide
     public static final String LOAD_INT_EXPRESSION = "\n\t%%%d = load i32, i32* %%%s, align 4";
+    public static final String LOAD_GLOBAL_INT_EXPRESSION = "\n\t%%%d = load i32, i32* @%s.%s, align 4";
     public static final String LOAD_FLOAT_EXPRESSION = "\n\t%%%d = load float, float* %%%s, align 4";
 
     public static final String ADD_INT = "\n\t%%%d = add nsw i32 %%%d, %%%d";
@@ -77,6 +85,7 @@ public class IRTemplate {
     public static final String NEW_STRING_CONSTANT = "\n@%s.%s = private unnamed_addr constant [%d x i8] c\"%s\\00\", align 1\n";
     public static final String LOAD_STRING = "\n\t%%%d = getelementptr inbounds [%d x i8], [%d x i8]* %%%s, i32 0, i32 0";
     public static final String MEM_COPY = "\ndeclare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i32, i1) #1";
+    public static final String STING_FLOAT = "@.str.2 = private unnamed_addr constant [4 x i8] c\"%f\\0A\\00\", align 1\n";
 
 
     //begin and and of the file

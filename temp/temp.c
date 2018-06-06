@@ -1,10 +1,11 @@
 #include <stdio.h>
 
+
+
 int main() {
-   int array[10];
-   array[5] = 8;
+   static int count = 5;
+   printf("%d", count);
 
-   printf("%d\n",array[5]);
-
+   int new = count;
    return 0;
 }

@@ -22,6 +22,7 @@ public final class IRGenerator {
     public static String endFile() {
         StringBuilder ir = new StringBuilder();
         ir.append(PRINT_STR_CONSTATNT);
+        ir.append(STING_FLOAT);
         ir.append(READ_STRING_CONST);
         ir.append(PRINTF_DECLARATION);
         ir.append(READ_DECLARATION);

@@ -28,6 +28,8 @@ public class Front {
     private static Map<String, Integer> addCounterMemory = new HashMap<>();
     private static Map<String, String> strings = new HashMap<>();
     private static Map<String, Array> arrays = new HashMap<>();
+    private static Map<String, Integer> staticInts = new HashMap<>();
+    private static Map<String, String> staticVariablesFunctions = new HashMap<>();
 
 
     public static class Program {
@@ -247,46 +249,72 @@ public class Front {
         }
     }
 
-    static class PrintIDStatement extends PrintStatement {
-        private final String id;
+    public static void run(String firstFile, String... anotherFiles) throws IOException {
+        StringBuilder iR = new StringBuilder();
 
-        public PrintIDStatement(String id) {
-            this.id = id;
+        iR.append(IRGenerator.beginFile());
+
+        PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(firstFile)));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        PParser parser = new PParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+
+        PParser.ProgramContext program = parser.program();
+
+        List<Statement> statements = program.val.statements;
+        System.out.println("Program statements : ");
+        for (Statement statement : statements) {
+            System.out.println(statement);
         }
 
-        @Override
-        public String getIRCode(String functionName) {
-            StringBuilder iR = new StringBuilder();
+        List<Function> functions = program.val.functions;
+        System.out.println("Program functions : ");
+        for (Function fun : functions) {
+            System.out.println(fun.toString());
+        }
 
-            int counterState = COUNTER;
+        iR.append(generateLL(program.val)).append(NEW_LINE);
 
-            switch (typesMemory.get(id)) {
-                case (INT): {
-                    iR.append(String.format(LOAD_INT_EXPRESSION, counterState, id));
-                    iR.append(String.format(PRINT_INT_ID, COUNTER + 1, counterState));
+        for (String anotherFile : anotherFiles) {
+            IRGenerator.generatedGlobalStatements.clear();
+            lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(anotherFile)));
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
 
-                    break;
-                }
-                case (STRING): {
-                    String value = strings.get(id);
-                    iR.append(String.format(LOAD_STRING, counterState, value.length() + 1, value.length() + 1, id));
-                    iR.append(String.format(PRINT_STRING_ID, COUNTER + 1, counterState));
-                    break;
-                }
+            tokens = new CommonTokenStream(lexer);
+
+            parser = new PParser(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+
+            program = parser.program();
+
+            statements = program.val.statements;
+            System.out.println("Program statements : ");
+            for (Statement statement : statements) {
+                System.out.println(statement);
             }
 
+            functions = program.val.functions;
+            System.out.println("Program functions : ");
+            for (Function fun : functions) {
+                System.out.println(fun.toString());
+            }
 
-
-            COUNTER += 2;
-            return iR.toString();
+            iR.append(generateLL(program.val)).append(NEW_LINE);
         }
 
-        @Override
-        public String toString() {
-            return "PrintIDStatement{" +
-                    "id='" + id + '\'' +
-                    '}';
-        }
+        iR.append(IRGenerator.endFile());
+
+        Util.writeIRToFile(iR.toString(), new File(LL_FILE_NAME));
+
     }
 
     static abstract class VariableDeclaration extends Statement {
@@ -477,6 +505,59 @@ public class Front {
         @Override
         public String getIRCode(String functionName) {
             return String.format(LOCAL_VARIABLE_INT_DECLARATION, name).concat(String.format(LOCAL_VARIABLE_INT_ASSIGMENT, Integer.parseInt(value), name));
+        }
+    }
+
+    static class PrintIDStatement extends PrintStatement {
+        private final String id;
+
+        public PrintIDStatement(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public String getIRCode(String functionName) {
+            StringBuilder iR = new StringBuilder();
+
+            int counterState = COUNTER;
+
+            switch (typesMemory.get(id)) {
+                case (INT): {
+                    if (staticInts.get(id) != null) {
+                        iR.append(String.format(LOAD_GLOBAL_INT_EXPRESSION, counterState, staticVariablesFunctions.get(id), id));
+                        iR.append(String.format(PRINT_INT_ID, counterState + 1, counterState));
+                    } else {
+                        iR.append(String.format(LOAD_INT_EXPRESSION, counterState, id));
+                        iR.append(String.format(PRINT_INT_ID, counterState + 1, counterState));
+                    }
+
+
+                    break;
+                }
+                case (FLOAT): {
+                    iR.append(String.format(LOAD_FLOAT_EXPRESSION, counterState, id));
+                    iR.append(String.format(PRINT_FLOAT, counterState + 1, counterState, counterState + 2, counterState + 1));
+                    COUNTER = COUNTER + 1;
+                    break;
+                }
+                case (STRING): {
+                    String value = strings.get(id);
+                    iR.append(String.format(LOAD_STRING, counterState, value.length() + 1, value.length() + 1, id));
+                    iR.append(String.format(PRINT_STRING_ID, COUNTER + 1, counterState));
+                    break;
+                }
+            }
+
+
+            COUNTER += 2;
+            return iR.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "PrintIDStatement{" +
+                    "id='" + id + '\'' +
+                    '}';
         }
     }
 
@@ -807,71 +888,39 @@ public class Front {
         }
     }
 
-    public static void run(String firstFile, String... anotherFiles) throws IOException {
-        StringBuilder iR = new StringBuilder();
+    static public class StaticIntVariableDeclaration extends VariableDeclaration {
+        private final String name;
+        private final String value;
 
-        iR.append(IRGenerator.beginFile());
-
-        PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(firstFile)));
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        PParser parser = new PParser(tokens);
-        parser.removeErrorListeners();
-        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-
-        PParser.ProgramContext program = parser.program();
-
-        List<Statement> statements = program.val.statements;
-        System.out.println("Program statements : ");
-        for (Statement statement : statements) {
-            System.out.println(statement);
+        public StaticIntVariableDeclaration(String name, String value) {
+            this.name = name;
+            this.value = value;
+            addToMemory();
         }
 
-        List<Function> functions = program.val.functions;
-        System.out.println("Program functions : ");
-        for (Function fun : functions) {
-            System.out.println(fun.toString());
+        @Override
+        public void addToMemory() {
+            typesMemory.put(name, INT);
+            staticInts.put(name, Integer.valueOf(value));
+
         }
 
-        iR.append(generateLL(program.val)).append(NEW_LINE);
-
-        for (String anotherFile : anotherFiles) {
-            lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(anotherFile)));
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-            tokens = new CommonTokenStream(lexer);
-
-            parser = new PParser(tokens);
-            parser.removeErrorListeners();
-            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-
-            program = parser.program();
-
-            statements = program.val.statements;
-            System.out.println("Program statements : ");
-            for (Statement statement : statements) {
-                System.out.println(statement);
-            }
-
-            functions = program.val.functions;
-            System.out.println("Program functions : ");
-            for (Function fun : functions) {
-                System.out.println(fun.toString());
-            }
-
-            iR.append(generateLL(program.val)).append(NEW_LINE);
+        @Override
+        public String toString() {
+            return "StaticIntVariableDeclaration{" +
+                    "name='" + name + '\'' +
+                    ", value='" + value + '\'' +
+                    '}';
         }
 
-        iR.append(IRGenerator.endFile());
+        @Override
+        public String getIRCode(String functionName) {
+            String template = String.format(IRTemplate.STATIC_INT, functionName, name, Integer.valueOf(value));
+            IRGenerator.generatedGlobalStatements.add(template);
+            staticVariablesFunctions.put(name, functionName);
 
-        Util.writeIRToFile(iR.toString(), new File(LL_FILE_NAME));
-
+            return "";
+        }
     }
 
     private static String generateLL(Program program) {

@@ -2,18 +2,21 @@
 target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@main.count = internal global i32 5, align 4
+
+@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
 
 ; Function Attrs: nounwind uwtable
 define i32 @main() #0 {
   %1 = alloca i32, align 4
-  %array = alloca [10 x i32], align 16
+  %new = alloca i32, align 4
+
   store i32 0, i32* %1, align 4
-  %2 = getelementptr inbounds [10 x i32], [10 x i32]* %array, i64 0, i64 5
-  store i32 8, i32* %2, align 4
-  %3 = getelementptr inbounds [10 x i32], [10 x i32]* %array, i64 0, i64 5
-  %4 = load i32, i32* %3, align 4
-  %5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i32 0, i32 0), i32 %4)
+  %2 = load i32, i32* @main.count, align 4
+  %3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i32 0, i32 0), i32 %2)
+
+  %4 = load i32, i32* @main.count, align 4
+  store i32 %4, i32* %new, align 4
   ret i32 0
 }
 
