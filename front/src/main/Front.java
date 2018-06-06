@@ -8,10 +8,7 @@ import util.Util;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static main.ir_generator.IRTemplate.*;
 
@@ -32,17 +29,84 @@ public class Front {
     private static Map<String, String> staticVariablesFunctions = new HashMap<>();
 
 
-    public static class Program {
-        List<Statement> statements = new ArrayList<Statement>();
-        List<Function> functions = new ArrayList<Function>();
+    public static void run(String firstFile, String... anotherFiles) throws IOException {
+        StringBuilder iR = new StringBuilder();
 
-        public List<Statement> getStatements() {
-            return statements;
+        iR.append(IRGenerator.beginFile());
+
+        PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(firstFile)));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        PParser parser = new PParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+
+        PParser.ProgramContext program = parser.program();
+
+        List<Statement> statements = program.val.statements;
+        System.out.println("Program statements : ");
+        for (Statement statement : statements) {
+            System.out.println(statement);
         }
 
-        public List<Function> getFunctions() {
-            return functions;
+        List<Function> functions = program.val.functions;
+        System.out.println("Program functions : ");
+        for (Function fun : functions) {
+            System.out.println(fun.toString());
         }
+
+        List<IfExpr> ifs = program.val.ifs;
+        System.out.println("Program ifs : ");
+        for (IfExpr ifExpr : ifs) {
+            System.out.println(ifExpr.toString());
+        }
+
+        iR.append(generateLL(program.val)).append(NEW_LINE);
+
+        for (String anotherFile : anotherFiles) {
+            IRGenerator.generatedGlobalStatements.clear();
+            lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(anotherFile)));
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+            tokens = new CommonTokenStream(lexer);
+
+            parser = new PParser(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+
+            program = parser.program();
+
+            statements = program.val.statements;
+            System.out.println("Program statements : ");
+            for (Statement statement : statements) {
+                System.out.println(statement);
+            }
+
+            functions = program.val.functions;
+            System.out.println("Program functions : ");
+            for (Function fun : functions) {
+                System.out.println(fun.toString());
+            }
+
+            ifs = program.val.ifs;
+            System.out.println("Program ifs : ");
+            for (IfExpr ifExpr : ifs) {
+                System.out.println(ifExpr.toString());
+            }
+
+            iR.append(generateLL(program.val)).append(NEW_LINE);
+        }
+
+        iR.append(IRGenerator.endFile());
+
+        Util.writeIRToFile(iR.toString(), new File(LL_FILE_NAME));
+
     }
 
     static public class Function {
@@ -88,6 +152,81 @@ public class Front {
                     ", body=" + body +
                     ", returnType='" + returnType + '\'' +
                     '}';
+        }
+    }
+
+    public static class Program {
+        List<Statement> statements = new ArrayList<Statement>();
+        List<Function> functions = new ArrayList<Function>();
+        List<IfExpr> ifs = new ArrayList<>();
+
+        public List<Statement> getStatements() {
+            return statements;
+        }
+
+        public List<Function> getFunctions() {
+            return functions;
+        }
+
+        public List<IfExpr> getIfs() {
+            return ifs;
+        }
+    }
+
+    static public class IfExpr extends Statement {
+        BoolExpr boolExpr;
+        Body body;
+
+        public IfExpr(BoolExpr boolExpr) {
+            this.boolExpr = boolExpr;
+        }
+
+        public BoolExpr getBoolExpr() {
+            return boolExpr;
+        }
+
+        public void setBoolExpr(BoolExpr boolExpr) {
+            this.boolExpr = boolExpr;
+        }
+
+        public Body getBody() {
+            return body;
+        }
+
+        public void setBody(Body body) {
+            this.body = body;
+        }
+
+        @Override
+        public String toString() {
+            return "IfExpr{" +
+                    "operator=" + boolExpr +
+                    ", body=" + body +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            IfExpr ifExpr = (IfExpr) o;
+            return Objects.equals(boolExpr, ifExpr.boolExpr) &&
+                    Objects.equals(body, ifExpr.body);
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(boolExpr, body);
+        }
+
+        @Override
+        public String getIRCode(String functionName) {
+            StringBuilder sb = new StringBuilder();
+            if (boolExpr.evaluate()) {
+                body.getStatements().forEach(statement -> sb.append(statement.getIRCode(functionName)));
+            }
+            return sb.toString();
         }
     }
 
@@ -249,72 +388,70 @@ public class Front {
         }
     }
 
-    public static void run(String firstFile, String... anotherFiles) throws IOException {
-        StringBuilder iR = new StringBuilder();
+    static public class BoolExpr extends Expression {
+        private final String left;
+        private final String operator;
+        private final String right;
 
-        iR.append(IRGenerator.beginFile());
-
-        PLexer lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(firstFile)));
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        PParser parser = new PParser(tokens);
-        parser.removeErrorListeners();
-        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-
-        PParser.ProgramContext program = parser.program();
-
-        List<Statement> statements = program.val.statements;
-        System.out.println("Program statements : ");
-        for (Statement statement : statements) {
-            System.out.println(statement);
+        public BoolExpr(String left, String operator, String right) {
+            this.left = left;
+            this.operator = operator;
+            this.right = right;
         }
 
-        List<Function> functions = program.val.functions;
-        System.out.println("Program functions : ");
-        for (Function fun : functions) {
-            System.out.println(fun.toString());
-        }
-
-        iR.append(generateLL(program.val)).append(NEW_LINE);
-
-        for (String anotherFile : anotherFiles) {
-            IRGenerator.generatedGlobalStatements.clear();
-            lexer = new PLexer(new org.antlr.v4.runtime.ANTLRInputStream(new FileReader(anotherFile)));
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-            tokens = new CommonTokenStream(lexer);
-
-            parser = new PParser(tokens);
-            parser.removeErrorListeners();
-            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-
-
-            program = parser.program();
-
-            statements = program.val.statements;
-            System.out.println("Program statements : ");
-            for (Statement statement : statements) {
-                System.out.println(statement);
+        public boolean evaluate() {
+            boolean evaluation = false;
+            int leftNum = Integer.valueOf(left);
+            int rightNum = Integer.valueOf(right);
+            switch (operator) {
+                case "<":
+                    evaluation = (leftNum < rightNum);
+                    break;
+                case "<=":
+                    evaluation = (leftNum <= rightNum);
+                    break;
+                case ">":
+                    evaluation = (leftNum > rightNum);
+                    break;
+                case ">=":
+                    evaluation = (leftNum >= rightNum);
+                    break;
+                case "==":
+                    evaluation = (leftNum == rightNum);
+                    break;
             }
-
-            functions = program.val.functions;
-            System.out.println("Program functions : ");
-            for (Function fun : functions) {
-                System.out.println(fun.toString());
-            }
-
-            iR.append(generateLL(program.val)).append(NEW_LINE);
+            return evaluation;
         }
 
-        iR.append(IRGenerator.endFile());
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            BoolExpr boolExpr1 = (BoolExpr) o;
+            return Objects.equals(left, boolExpr1.left) &&
+                    Objects.equals(operator, boolExpr1.operator) &&
+                    Objects.equals(right, boolExpr1.right);
+        }
 
-        Util.writeIRToFile(iR.toString(), new File(LL_FILE_NAME));
+        @Override
+        public int hashCode() {
 
+            return Objects.hash(left, operator, right);
+        }
+
+        @Override
+        public String toString() {
+            return "BoolExpr{" +
+                    "left='" + left + '\'' +
+                    ", operator='" + operator + '\'' +
+                    ", right='" + right + '\'' +
+                    '}';
+        }
+
+        @Override
+        public String getIRCode() {
+            return null;
+        }
     }
 
     static abstract class VariableDeclaration extends Statement {

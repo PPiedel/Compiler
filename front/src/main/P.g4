@@ -25,12 +25,22 @@ function returns [Front.Function val] :
     body { $val.setBody($body.val); }
 ;
 
+ifExpr returns [Front.IfExpr val] :
+    IF LEFT_BRACKET operator RIGHT_BRACKET { $val = new Front.IfExpr($operator.val); }
+    body { $val.setBody($body.val); }
+;
+
 statement returns [Front.Statement val] :
     a = expression {$val = new Front.StatementExpression($a.val); } |
     c = variable_declaration { $val = $c.val; } |
     d = print{{ $val = $d.val; } } |
     e = returnst{{ $val = $e.val; } } |
-    f = read {{ $val = $f.val; } }
+    f = read {{ $val = $f.val; } } |
+    g = ifExpr {{ $val = $g.val; } }
+;
+
+operator returns [Front.BoolExpr val] :
+    left = NUMBER op = BOOL_OPERATOR right = NUMBER { $val = new Front.BoolExpr($left.text,$op.text,$right.text); } |
 ;
 
 
@@ -42,7 +52,8 @@ expression returns [Front.Expression val] :
     f = expression MINUS g = expression { $val = new Front.MinusExpression($f.val,$g.val); } |
     h = expression MUTLIPLY i = expression { $val = new Front.MultiplyExpression($h.val,$i.val); } |
     j = expression DIVIDE k = expression { $val = new Front.DivideExpression($j.val,$k.val); } |
-    l = indexingExpression { $val = $l.val; }
+    l = indexingExpression { $val = $l.val; } |
+    z = operator {{ $val = $z.val; } }
 ;
 
 indexingExpression returns [Front.IndexingExpression val]
@@ -51,7 +62,7 @@ indexingExpression returns [Front.IndexingExpression val]
 
 
 assignment returns [Front.Assignment val] :
-    to = ID '=' what = expression { $val = new Front.Assignment($to.text, $what.val); } |
+    to = ID '=' what = expression { $val = new Front.Assignment($to.text, $what.val); }
 ;
 
 variable_declaration returns [Front.VariableDeclaration val] :
@@ -132,6 +143,9 @@ READ_FLOAT : 'readFloat'
 FUN : 'fun'
 ;
 
+IF : 'if'
+;
+
 RETURN : 'return'
 ;
 
@@ -151,6 +165,9 @@ ADD : '+'
 ;
 
 MINUS : '-'
+;
+
+BOOL_OPERATOR : '<' | '>' | '==' | '<=' | '>='
 ;
 
 MUTLIPLY : '*'

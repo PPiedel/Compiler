@@ -38,15 +38,43 @@ public interface PListener extends ParseTreeListener {
 	 */
 	void exitFunction(PParser.FunctionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link PParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterStatement(PParser.StatementContext ctx);
+     * Enter a parse tree produced by {@link PParser#ifExpr}.
+     * @param ctx the parse tree
+     */
+    void enterIfExpr(PParser.IfExprContext ctx);
+
+    /**
+     * Exit a parse tree produced by {@link PParser#ifExpr}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitIfExpr(PParser.IfExprContext ctx);
+
+    /**
+     * Enter a parse tree produced by {@link PParser#statement}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterStatement(PParser.StatementContext ctx);
 	/**
 	 * Exit a parse tree produced by {@link PParser#statement}.
 	 * @param ctx the parse tree
 	 */
 	void exitStatement(PParser.StatementContext ctx);
+
+    /**
+     * Enter a parse tree produced by {@link PParser#boolExpr}.
+     *
+     * @param ctx the parse tree
+     */
+    void enterBoolExpr(PParser.BoolExprContext ctx);
+
+    /**
+     * Exit a parse tree produced by {@link PParser#boolExpr}.
+     *
+     * @param ctx the parse tree
+     */
+    void exitBoolExpr(PParser.BoolExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PParser#expression}.
 	 * @param ctx the parse tree
@@ -57,8 +85,10 @@ public interface PListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpression(PParser.ExpressionContext ctx);
-	/**
+
+    /**
      * Enter a parse tree produced by {@link PParser#indexingExpression}.
+     *
      * @param ctx the parse tree
      */
     void enterIndexingExpression(PParser.IndexingExpressionContext ctx);
@@ -89,8 +119,8 @@ public interface PListener extends ParseTreeListener {
 	/**
 	 * Exit a parse tree produced by {@link PParser#variable_declaration}.
 	 * @param ctx the parse tree
-	 */
-	void exitVariable_declaration(PParser.Variable_declarationContext ctx);
+     */
+    void exitVariable_declaration(PParser.Variable_declarationContext ctx);
 
     /**
      * Enter a parse tree produced by {@link PParser#array}.
@@ -108,7 +138,6 @@ public interface PListener extends ParseTreeListener {
 
     /**
      * Enter a parse tree produced by {@link PParser#print}.
-     *
      * @param ctx the parse tree
      */
     void enterPrint(PParser.PrintContext ctx);

@@ -1,73 +1,22 @@
-fun myFun() : int {
-    static int GLOBAL = 5;
-    return 0;
-}
-
-
 fun main() : int {
 
-    //one line comment
-    float name = 5.5;
-    print(name);
+    if(5 <= 5){
+       int i = 0;
+       int zet = 0;
 
-    int x = 999;
-    print(x);
+       String hello = "Jestem w instrukcji IF";
+       print(hello);
+    };
 
-    String glob = "GLOBAL VARIABLE PRINT : ";
-    print(glob);
-    print(GLOBAL);
+    if(100 < 5){
+           int i2 = 0;
+           int zet2 = 0;
 
-
-    /*two line
-    comment*/
-
-    String hello = "Hello, this is program written by Pawel";
-    print(hello);
-
-    int i = 0;
-    String write = "Please write a number.";
-    print(write);
-    readInt(i);
-    String you = "You have just entered : ";
-    print(you);
-    print(i);
-
-    //addition
-    String add = "Your number + 10 is : ";
-    print(add);
-    int ten  = 10;
-    int resultAdd = 0;
-    resultAdd = i + ten;
-    print(resultAdd);
-
-    //multiplying
-    String mul = "Your number * 10 is : ";
-    print(mul);
-    int resultMul = 0;
-    resultMul = i * ten;
-    print(resultMul);
-
-    //subtraction
-    String sub = "Your number - 10 is : ";
-    print(sub);
-    int resultSub = 0;
-    resultSub = i - ten;
-    print(resultSub);
-
-    //divide
-    String div = "Your number / 10 is : ";
-    print(div);
-    int resultDiv = 0;
-    resultDiv = i / ten;
-    print(resultDiv);
-
-    //array
-    String arr = "Array demonstration : ";
-    print(arr);
-    int[] array = new int[10];
-    array[5] = 555;
-    print(array[5]);
-
+           String hello2 = "Jestem w instrukcji IF po raz drugi.";
+           print(hello2);
+    };
 
     return 0;
 }
+
+
