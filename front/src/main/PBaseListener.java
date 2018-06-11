@@ -52,54 +52,61 @@ public class PBaseListener implements PListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-    @Override
-    public void enterIfExpr(PParser.IfExprContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitIfExpr(PParser.IfExprContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterStatement(PParser.StatementContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitStatement(PParser.StatementContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterBoolExpr(PParser.BoolExprContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitBoolExpr(PParser.BoolExprContext ctx) {
-    }
+	@Override public void enterIfExpr(PParser.IfExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIfExpr(PParser.IfExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhileLoop(PParser.WhileLoopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhileLoop(PParser.WhileLoopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhileExpr(PParser.WhileExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhileExpr(PParser.WhileExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatement(PParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatement(PParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOperator(PParser.OperatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperator(PParser.OperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -116,28 +123,20 @@ public class PBaseListener implements PListener {
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterIndexingExpression(PParser.IndexingExpressionContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitIndexingExpression(PParser.IndexingExpressionContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterAssignment(PParser.AssignmentContext ctx) {
-    }
+	 */
+	@Override public void enterIndexingExpression(PParser.IndexingExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndexingExpression(PParser.IndexingExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAssignment(PParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -155,36 +154,25 @@ public class PBaseListener implements PListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-    @Override
-    public void exitVariable_declaration(PParser.Variable_declarationContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterArray(PParser.ArrayContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void exitArray(PParser.ArrayContext ctx) {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>The default implementation does nothing.</p>
-     */
-    @Override
-    public void enterPrint(PParser.PrintContext ctx) {
-    }
+	@Override public void exitVariable_declaration(PParser.Variable_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray(PParser.ArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray(PParser.ArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrint(PParser.PrintContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

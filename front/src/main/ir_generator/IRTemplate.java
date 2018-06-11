@@ -7,6 +7,15 @@ public class IRTemplate {
     public static final String FUNCTION_END = "}";
     public static final String NEW_LINE = "\n";
 
+    //while
+    public static final String WHILE_BEGIN =
+            "\n\tbr label %%%d" +
+            "\n\t%%%d = load i32, i32* %%%s, align 4" +
+            "\n\t%%%d = icmp slt i32 %%%d, %d" +
+            "\n\tbr i1 %%%d, label %%%d, label %%%d\n";
+
+    public static final String WHILE_END = "\n\tbr label %%%d";
+
     //int
     public static final String LOCAL_VARIABLE_INT_DECLARATION = "\n\t%%%s = alloca i32, align 4\n";
     public static final String LOCAL_VARIABLE_INT_ASSIGMENT = "\tstore i32 %d, i32* %%%s, align 4\n";

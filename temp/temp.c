@@ -3,9 +3,12 @@
 
 
 int main() {
-   static int count = 5;
-   printf("%d", count);
+   int i = 0;
 
-   int new = count;
+   while(i<10){
+         int one = 1;
+         i = i + one;
+   };
+
    return 0;
 }

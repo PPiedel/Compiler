@@ -230,6 +230,52 @@ public class Front {
         }
     }
 
+    static public class While extends Statement {
+       WhileExpr whileExpr;
+        Body body;
+
+        public WhileExpr getWhileExpr() {
+            return whileExpr;
+        }
+
+        public void setWhileExpr(WhileExpr whileExpr) {
+            this.whileExpr = whileExpr;
+        }
+
+        public Body getBody() {
+            return body;
+        }
+
+        public void setBody(Body body) {
+            this.body = body;
+        }
+
+        public While(WhileExpr whileExpr) {
+            this.whileExpr = whileExpr;
+        }
+
+        @Override
+        public String getIRCode(String functionName) {
+            int counterState = COUNTER;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(String.format(IRTemplate.WHILE_BEGIN,counterState,counterState+1,whileExpr.left,counterState+2,counterState+1,Integer.parseInt(whileExpr.right),counterState+2,counterState+3,counterState+7));
+            COUNTER+=4;
+            body.statements.forEach(statement -> stringBuilder.append(statement.getIRCode(functionName)));
+            stringBuilder.append(String.format(IRTemplate.WHILE_END,counterState));
+            COUNTER+=1;
+
+            return stringBuilder.toString();
+        }
+
+        @Override
+        public String toString() {
+            return "While{" +
+                    "whileExpr=" + whileExpr +
+                    ", body=" + body +
+                    '}';
+        }
+    }
+
 
     public static abstract class Statement {
         public abstract String getIRCode(String functionName);
@@ -453,6 +499,33 @@ public class Front {
             return null;
         }
     }
+
+    static public class WhileExpr extends Expression {
+        private final String left;
+        private final String operator;
+        private final String right;
+
+        public WhileExpr(String left, String operator, String right) {
+            this.left = left;
+            this.operator = operator;
+            this.right = right;
+        }
+
+        @Override
+        public String getIRCode() {
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return "WhileExpr{" +
+                    "left='" + left + '\'' +
+                    ", operator='" + operator + '\'' +
+                    ", right='" + right + '\'' +
+                    '}';
+        }
+    }
+
 
     static abstract class VariableDeclaration extends Statement {
         public abstract void addToMemory();

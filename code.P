@@ -1,20 +1,37 @@
+fun myFun() : int {
+    static int GLOBAL = 5;
+    return 0;
+}
+
+
+
+
 fun main() : int {
+    String glob = "GLOBAL VARIABLE PRINT : ";
+    print(glob);
+    print(GLOBAL);
+
 
     if(5 <= 5){
-       int i = 0;
-       int zet = 0;
-
-       String hello = "Jestem w instrukcji IF";
-       print(hello);
-    };
+         String hello = "Jestem w pierwszej instrukcji IF";
+         print(hello);
+        };
 
     if(100 < 5){
-           int i2 = 0;
-           int zet2 = 0;
-
-           String hello2 = "Jestem w instrukcji IF po raz drugi.";
-           print(hello2);
+          String hello2 = "Jestem w instrukcji IF po raz drugi.";
+          print(hello2);
     };
+
+
+    int i = 0;
+    while(i<10){
+        int one = 1;
+        i = i + one;
+    };
+
+    String printS = "Zmienna i po dziesieciokrotnym dodaniu jedynki w petli : ";
+    print(printS);
+    print(i);
 
     return 0;
 }

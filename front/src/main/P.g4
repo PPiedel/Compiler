@@ -30,13 +30,23 @@ ifExpr returns [Front.IfExpr val] :
     body { $val.setBody($body.val); }
 ;
 
+whileLoop returns [Front.While val] :
+    WHILE LEFT_BRACKET whileExpr RIGHT_BRACKET { $val = new Front.While($whileExpr.val); }
+    body { $val.setBody($body.val); }
+;
+
+whileExpr returns [Front.WhileExpr val] :
+    left = ID op = BOOL_OPERATOR right = NUMBER { $val = new Front.WhileExpr($left.text,$op.text,$right.text); } |
+;
+
 statement returns [Front.Statement val] :
     a = expression {$val = new Front.StatementExpression($a.val); } |
     c = variable_declaration { $val = $c.val; } |
     d = print{{ $val = $d.val; } } |
     e = returnst{{ $val = $e.val; } } |
     f = read {{ $val = $f.val; } } |
-    g = ifExpr {{ $val = $g.val; } }
+    g = ifExpr {{ $val = $g.val; } } |
+    h = whileLoop{{ $val = $h.val; } }
 ;
 
 operator returns [Front.BoolExpr val] :
@@ -55,6 +65,7 @@ expression returns [Front.Expression val] :
     l = indexingExpression { $val = $l.val; } |
     z = operator {{ $val = $z.val; } }
 ;
+
 
 indexingExpression returns [Front.IndexingExpression val]
     : name = ID LEFT_SQUARE_BRACKET index = NUMBER RIGHT_SQUARE_BRACKET EQUALS value = NUMBER { $val = new Front.IndexingExpression($name.text,$index.text,$value.text); }
@@ -144,6 +155,9 @@ FUN : 'fun'
 ;
 
 IF : 'if'
+;
+
+WHILE : 'while'
 ;
 
 RETURN : 'return'
